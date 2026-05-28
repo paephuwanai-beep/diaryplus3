@@ -60,7 +60,7 @@
         .blinking-smooth { animation: blinker 2s ease-in-out infinite; color: #E9D5FF; font-weight: 600; letter-spacing: 1px;}
         @keyframes blinker { 50% { opacity: 0.3; } }
 
-        /* SIDEBAR (Glassmorphism) */
+        /* SIDEBAR */
         .sidebar { 
             width: var(--sidebar-width); background: rgba(11, 15, 25, 0.65); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             border-right: 1px solid rgba(255, 255, 255, 0.08); height: 100vh; position: fixed; display: flex; flex-direction: column; 
@@ -162,8 +162,8 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* MODAL */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-box { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.5); border-radius: 24px; padding: 35px; width: 95%; max-width: 500px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px rgba(0,0,0,0.25); animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: #1E293B;}
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 2000; justify-content: center; align-items: center; overflow-y: auto;}
+        .modal-box { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.5); border-radius: 24px; padding: 35px; width: 95%; max-width: 800px; margin: 50px auto; box-shadow: 0 25px 50px rgba(0,0,0,0.25); animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: #1E293B;}
         @keyframes modalPop { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
         .marquee-container { width: 100%; overflow: hidden; white-space: nowrap; }
@@ -173,6 +173,15 @@
         #global-loader { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.8); backdrop-filter: blur(10px); z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; color:#fff; font-family:'Prompt'; font-size:20px; transition: 0.5s;}
         .spinner { border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid #D8B4FE; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom:15px;}
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Print Template specific styles */
+        .print-page {
+            background: white; 
+            padding: 50px; 
+            width: 850px; 
+            margin-bottom: 20px; 
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body>
@@ -214,7 +223,7 @@
                     <div class="card-value prompt-text" id="home-workload" style="font-size: 26px; margin-top: 10px;">ไม่มีข้อมูล</div>
                     <i class="fa-solid fa-user-nurse card-bg-icon"></i>
                 </div>
-                <div class="card" style="background: linear-gradient(135deg, rgba(32, 201, 151, 0.85) 0%, rgba(5, 150, 105, 0.85) 100%); border-color: rgba(32, 201, 151, 0.4);" onclick="showTab('record')">
+                <div class="card" style="background: linear-gradient(135deg, rgba(32, 201, 151, 0.85) 0%, rgba(5, 150, 105, 0.85) 100%); border-color: rgba(32, 201, 151, 0.4);" onclick="viewLatestRecord()">
                     <div class="card-title">ผู้ป่วยคงพยาบาล (เวรล่าสุด)</div>
                     <div class="card-value"><span id="home-ipd">0</span> <span style="font-size: 22px; font-weight: normal; font-family: 'Sarabun';">ราย</span></div>
                     <i class="fa-solid fa-bed-pulse card-bg-icon"></i>
@@ -265,6 +274,12 @@
                 <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: flex-end; flex-wrap: wrap;">
                     <div class="form-control" style="margin:0;"><label>จากวันที่</label><input type="date" id="sum-start" onchange="updateSummaryTable()"></div>
                     <div class="form-control" style="margin:0;"><label>ถึงวันที่</label><input type="date" id="sum-end" onchange="updateSummaryTable()"></div>
+                    <div class="form-control" style="margin:0;"><label>การเรียงลำดับ</label>
+                        <select id="sum-sort" onchange="updateSummaryTable()">
+                            <option value="desc">ใหม่ไปเก่า</option>
+                            <option value="asc">เก่าไปใหม่</option>
+                        </select>
+                    </div>
                     <div class="form-control" style="margin:0;"><label>กรองอุบัติการณ์/ความเสี่ยง</label>
                         <select id="sum-incident" onchange="updateSummaryTable()">
                             <option value="all">ดูทั้งหมด</option>
@@ -591,15 +606,30 @@
         </div>
     </div>
 
-    <div id="render-template" style="position: absolute; left: -9999px; top: 0; background: white; padding: 50px; width: 850px; color: black; font-family: 'Sarabun', sans-serif; min-height: 1122px; height: max-content; overflow: visible; z-index: -10;">
-        <div style="text-align: center; border-bottom: 3px solid #4C1D95; padding-bottom: 15px; margin-bottom: 20px;">
-            <h2 class="prompt-text" style="color: #4C1D95; margin:0; font-size: 30px;">ระบบบันทึกเหตุการณ์ประจำเวร</h2>
-            <h3 class="prompt-text" style="color: #1E293B; margin:5px 0 0 0; font-size: 24px;">ผู้ป่วยในชาย โรงพยาบาลคอนสาร</h3>
-            <p id="rt-subtitle" style="font-size: 20px; font-weight: 600; margin: 10px 0 0 0;">วันที่ -- | เวร --</p>
-        </div>
-        <div id="rt-content" style="font-size: 20px; line-height: 1.5;"></div>
-        <div id="rt-signatures" style="margin-top: 50px; padding-right: 50px;">
+    <div id="render-template" style="position: absolute; left: -9999px; top: 0; width: 850px; font-family: 'Sarabun', sans-serif; z-index: -10; background: transparent;">
+        
+        <div id="print-page-1" class="print-page" style="min-height: 1122px;">
+            <div style="text-align: center; border-bottom: 3px solid #4C1D95; padding-bottom: 15px; margin-bottom: 20px;">
+                <h2 class="prompt-text" style="color: #4C1D95; margin:0; font-size: 30px;">ระบบบันทึกเหตุการณ์ประจำเวร</h2>
+                <h3 class="prompt-text" style="color: #1E293B; margin:5px 0 0 0; font-size: 24px;">ผู้ป่วยในชาย โรงพยาบาลคอนสาร</h3>
+                <p id="rt-subtitle-p1" style="font-size: 20px; font-weight: 600; margin: 10px 0 0 0;">วันที่ -- | เวร --</p>
             </div>
+            <div id="rt-content-p1" style="font-size: 20px; line-height: 1.5;"></div>
+        </div>
+
+        <div id="print-page-2" class="print-page" style="min-height: 1122px;">
+            <div style="text-align: center; border-bottom: 3px solid #4C1D95; padding-bottom: 15px; margin-bottom: 20px;">
+                <h2 class="prompt-text" style="color: #4C1D95; margin:0; font-size: 30px;">ระบบบันทึกเหตุการณ์ประจำเวร (ต่อ)</h2>
+                <p id="rt-subtitle-p2" style="font-size: 20px; font-weight: 600; margin: 10px 0 0 0;">วันที่ -- | เวร --</p>
+            </div>
+            <div id="rt-content-p2" style="font-size: 20px; line-height: 1.5;"></div>
+        </div>
+
+        <div id="print-page-3" class="print-page" style="min-height: 1122px;">
+            <div id="rt-content-p3" style="font-size: 20px; line-height: 1.5;"></div>
+            <div id="rt-signatures" style="margin-top: 40px; padding-right: 50px; font-size: 20px;"></div>
+        </div>
+
     </div>
 
     <script>
@@ -667,9 +697,10 @@
             super: "พยาบาลตรวจการ ก., พยาบาลตรวจการ ข.",
             doc: "พญ. เมตตา, พญ.ศุภาวรรณ",
             sign1Name: "นางสาววินัย ชาวเชียงตุง", sign1Acad: "พยาบาลวิชาชีพชำนาญการ", sign1Pos: "หัวหน้างานการพยาบาลผู้ป่วยในชาย",
-            sign2Name: "นางไพเราะ คลองนาวัง", sign2Acad: "พยาบาลวิชาชีพชำนาญการ", sign2Pos: "รักษาการหัวหน้ากลุ่มงานการพยาบาล",
-            sign3Name: "นายแพทย์ตัวอย่าง", sign3Acad: "นายแพทย์เชี่ยวชาญ", sign3Pos: "ผู้อำนวยการโรงพยาบาลคอนสาร"
+            sign2Name: "นางไพเราะ คลองนาวัง", sign2Acad: "พยาบาลวิชาชีพชำนาญการพิเศษ", sign2Pos: "รักษาการในตำแหน่งหัวหน้าพยาบาล",
+            sign3Name: "นายแพทย์ตัวอย่าง", sign3Acad: "นายแพทย์เชี่ยวชาญ (ด้านเวชกรรมป้องกัน)", sign3Pos: "รักษาการในตำแหน่งผู้อำนวยการโรงพยาบาลคอนสาร"
         };
+
         function loadSettings() {
             let saved = JSON.parse(localStorage.getItem('ipd3_settings')) || defaultSettings;
             document.getElementById('set-rn').value = saved.rn || defaultSettings.rn; 
@@ -701,6 +732,7 @@
             pop(['dd-super'], document.getElementById('set-super').value, true); 
             pop(['dd-doc'], document.getElementById('set-doc').value, true);
         }
+
         function saveSettings() {
             localStorage.setItem('ipd3_settings', JSON.stringify({
                 rn: document.getElementById('set-rn').value, na: document.getElementById('set-na').value,
@@ -794,6 +826,14 @@
             window.scrollTo(0,0);
         }
 
+        function viewLatestRecord() {
+            if (localDiaryStorage && localDiaryStorage.length > 0) {
+                viewPreview(localDiaryStorage[0].uid);
+            } else {
+                showModal('แจ้งเตือน', 'ยังไม่มีประวัติการบันทึกข้อมูล', 'warning');
+            }
+        }
+
         // --- 4. การคำนวณคณิตศาสตร์และประเมินสถิติ ---
         function runLiveCalc() {
             const sumIn = ['v-yok', 'v-new', 'v-movin'].reduce((s, id) => s + (parseInt(document.getElementById(id).value)||0), 0);
@@ -844,11 +884,11 @@
             return { isValid, errText };
         }
 
-        // --- 5. ฟังก์ชันการสั่งบันทึก / แก้ไขข้อมูล และวาดไฟล์ PDF ---
+        // --- 5. ฟังก์ชันการสั่งบันทึก / แก้ไขข้อมูล และวาดไฟล์แยกเป็น 3 หน้า ---
         function populateSignaturesHtml(rnName) {
             let saved = JSON.parse(localStorage.getItem('ipd3_settings')) || defaultSettings;
             let html = `
-                <div style="display: flex; justify-content: flex-end; margin-bottom: 40px;">
+                <div style="display: flex; justify-content: flex-end; margin-bottom: 50px;">
                     <div style="text-align: center;">
                         <br>
                         <p>ลงชื่อ.......................................................ผู้บันทึก</p>
@@ -856,7 +896,7 @@
                         <p>พยาบาลวิชาชีพ</p>
                     </div>
                 </div>
-                <div style="display: flex; justify-content: flex-end; margin-bottom: 40px;">
+                <div style="display: flex; justify-content: flex-end; margin-bottom: 50px;">
                     <div style="text-align: center;">
                         <p>ลงชื่อ.......................................................</p>
                         <p style="font-weight:600; margin-top:5px;">( ${saved.sign1Name} )</p>
@@ -864,7 +904,7 @@
                         <p>${saved.sign1Pos}</p>
                     </div>
                 </div>
-                <div style="display: flex; justify-content: flex-end; margin-bottom: 40px;">
+                <div style="display: flex; justify-content: flex-end; margin-bottom: 50px;">
                     <div style="text-align: center;">
                         <p>ลงชื่อ.......................................................</p>
                         <p style="font-weight:600; margin-top:5px;">( ${saved.sign2Name} )</p>
@@ -882,6 +922,52 @@
                 </div>
             `;
             return html;
+        }
+
+        function populatePrintPages(r) {
+            document.getElementById('rt-subtitle-p1').innerText = `วันที่ ${r.date} | เวร ${r.shift}`;
+            document.getElementById('rt-subtitle-p2').innerText = `วันที่ ${r.date} | เวร ${r.shift}`;
+            
+            // หน้าที่ 1
+            let p1 = `
+            <div style="background: #F8FAFC; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #CBD5E1;">
+                <h4 class="prompt-text" style="color: #4C1D95; margin: 0 0 10px 0; font-size: 22px;">1. สถิติผู้ป่วยและภาระงาน</h4>
+                <p style="margin:0;"><strong>ยอดยกมา:</strong> ${r.datasetObj['ยอดยกมา']||0} | <strong>รับใหม่:</strong> ${r.datasetObj['รับใหม่']||0} | <strong>รับย้าย:</strong> ${r.datasetObj['รับย้าย']||0} | <strong>จำหน่าย:</strong> ${r.datasetObj['จำหน่าย']||0} | <strong>ย้ายไป:</strong> ${r.datasetObj['ย้ายไป']||0}</p>
+                <p style="margin:5px 0 0 0;"><strong>ตาย:</strong> ${r.datasetObj['ตาย']||0} | <strong>ส่งต่อ:</strong> ${r.datasetObj['ส่งต่อ']||0} | <strong>ไม่สมัครใจ:</strong> ${r.datasetObj['ไม่สมัครใจอยู่']||0}</p>
+                <p style="margin:5px 0 0 0;"><strong style="color:#DC2626;">ยอดคงพยาบาลสุทธิ: ${r.netCount} ราย</strong> (ประเภท1: ${r.datasetObj['ประเภท 1']||0}, ประเภท2: ${r.datasetObj['ประเภท 2']||0}, ประเภท3: ${r.datasetObj['ประเภท 3']||0}, ประเภท4: ${r.datasetObj['ประเภท 4']||0})</p>
+                <p style="margin:5px 0 0 0;"><strong>คะแนนภาระงาน:</strong> ${r.datasetObj['คะแนนภาระงาน']||0} (${r.datasetObj['สถานะภาระงาน']||'-'})</p>
+            </div>
+            <div style="background: #F8FAFC; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #CBD5E1;">
+                <h4 class="prompt-text" style="color: #4C1D95; margin: 0 0 10px 0; font-size: 22px;">2. อุบัติการณ์ และความเสี่ยงประจำเวร</h4>
+                <p style="margin:0;"><strong>สรุปเหตุการณ์:</strong> ${r.datasetObj['อุบัติการณ์'] || 'เหตุการณ์ทั่วไปปกติ'}</p>
+                <p style="margin:5px 0 0 0;"><strong>รายละเอียด Refer 24 ชม:</strong> ${r.datasetObj['รายละเอียด Refer 24 ชม.'] || '-'}</p>
+                <p style="margin:5px 0 0 0;"><strong>รายละเอียด Case Refer:</strong> ${r.datasetObj['รายละเอียด Refer'] || '-'}</p>
+                <p style="margin:5px 0 0 0;"><strong>รายละเอียด Case Dead:</strong> ${r.datasetObj['รายละเอียด Dead'] || '-'}</p>
+                <p style="margin:5px 0 0 0;"><strong>รายละเอียด ผู้ป่วยประเภท 4:</strong> ${r.datasetObj['รายละเอียด Type 4'] || '-'}</p>
+            </div>
+            `;
+            document.getElementById('rt-content-p1').innerHTML = p1;
+
+            // หน้าที่ 2
+            let p2 = `
+            <h4 class="prompt-text" style="color: #4C1D95; margin: 20px 0 10px 0; font-size: 22px;">3. สรุปหัตถการและกิจกรรมพยาบาล</h4>
+            <table width="100%" border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; border-color: #CBD5E1; font-size: 20px;">
+            `;
+            let count = 0; p2 += `<tr>`;
+            for(let key in r.datasetObj) {
+                if(typeof r.datasetObj[key] === 'number') {
+                    p2 += `<td style="width: 25%;"><strong>${key}:</strong> ${r.datasetObj[key]}</td>`;
+                    count++; if(count % 4 === 0) p2 += `</tr><tr>`;
+                }
+            }
+            while(count % 4 !== 0) { p2 += `<td style="width: 25%;"></td>`; count++; }
+            p2 += `</tr></table>`;
+            document.getElementById('rt-content-p2').innerHTML = p2;
+
+            // หน้าที่ 3
+            let p3 = `<div style="margin-bottom: 30px;"><p style="margin:0; font-size: 20px;"><strong>รายชื่อปฏิบัติหน้าที่:</strong> พยาบาล1: ${r.datasetObj['พยาบาล 1']||'-'}, พยาบาล2: ${r.datasetObj['พยาบาล 2']||'-'}, ผู้ช่วยเหลือ: ${r.datasetObj['ผู้ช่วยเหลือคนไข้']||'-'}, ตรวจการ: ${r.datasetObj['พยาบาลตรวจการ']||'-'}</p></div>`;
+            document.getElementById('rt-content-p3').innerHTML = p3;
+            document.getElementById('rt-signatures').innerHTML = populateSignaturesHtml(r.rn);
         }
 
         async function executeSaveProcess() {
@@ -926,36 +1012,24 @@
 
             localStorage.setItem('ipd3_diary_storage', JSON.stringify(localDiaryStorage));
 
-            document.getElementById('rt-subtitle').innerText = `วันที่ ${logItem.date} | เวร ${logItem.shift}`;
-            document.getElementById('rt-content').innerHTML = buildTemplateHTML(logItem);
-            document.getElementById('rt-signatures').innerHTML = populateSignaturesHtml(logItem.rn);
-            const renderDiv = document.getElementById('render-template');
+            // โหลดข้อมูลใส่ 3 หน้า
+            populatePrintPages(logItem);
             
             window.scrollTo(0,0);
             
             setTimeout(async () => {
                 try {
-                    const canvas = await html2canvas(renderDiv, { scale: 2, useCORS: true });
-                    const img = canvas.toDataURL('image/jpeg', 0.95);
                     const { jsPDF } = window.jspdf; 
                     const pdf = new jsPDF('p', 'mm', 'a4');
-                    
                     const pdfWidth = pdf.internal.pageSize.getWidth();
-                    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-                    const pageHeight = 295; // ใช้ 295 เพื่อเว้นขอบล่างนิดหน่อย ป้องกันขอบขาด
                     
-                    let heightLeft = pdfHeight - pageHeight;
-                    let position = 0;
-                    
-                    // เพิ่มหน้าแรก
-                    pdf.addImage(img, 'JPEG', 0, position, pdfWidth, pdfHeight);
-                    
-                    // วนลูปเพิ่มหน้าต่อไปหากข้อมูลยาวเกิน 1 หน้า
-                    while (heightLeft > 0) {
-                        position -= pageHeight;
-                        pdf.addPage();
-                        pdf.addImage(img, 'JPEG', 0, position, pdfWidth, pdfHeight);
-                        heightLeft -= pageHeight;
+                    for (let i = 1; i <= 3; i++) {
+                        const canvas = await html2canvas(document.getElementById('print-page-' + i), { scale: 2, useCORS: true });
+                        const img = canvas.toDataURL('image/jpeg', 1.0);
+                        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                        
+                        if (i > 1) pdf.addPage();
+                        pdf.addImage(img, 'JPEG', 0, 0, pdfWidth, pdfHeight);
                     }
                     
                     pdf.save(`IPD_${logItem.date}_${logItem.shift}.pdf`);
@@ -969,44 +1043,11 @@
                     fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
                     .catch(err => console.log("Post execution log:", err));
                     
-                    showModal('บันทึกและสร้าง PDF สำเร็จ', 'ข้อมูลถูกบันทึกเข้าระบบ Sheets เรียบร้อย และดาวน์โหลด PDF แล้ว', 'success');
+                    showModal('บันทึกและสร้าง PDF สำเร็จ', 'ข้อมูลถูกบันทึกเข้าระบบ Sheets เรียบร้อย และดาวน์โหลด PDF แบ่ง 3 หน้าสมบูรณ์', 'success');
                     resetForm(); showTab('history'); updateDashboard(); updateSummaryTable(); updateRiskReviewTable();
                 } catch(e) { alert("Error PDF: " + e); }
                 btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> บันทึกเข้าระบบ & โหลด PDF`;
             }, 500);
-        }
-
-        function buildTemplateHTML(r) {
-            let html = `
-            <div style="background: #F8FAFC; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #CBD5E1;">
-                <h4 class="prompt-text" style="color: #4C1D95; margin: 0 0 10px 0; font-size: 22px;">1. สถิติผู้ป่วยและภาระงาน</h4>
-                <p style="margin:0;"><strong>ยอดยกมา:</strong> ${r.datasetObj['ยอดยกมา']||0} | <strong>รับใหม่:</strong> ${r.datasetObj['รับใหม่']||0} | <strong>รับย้าย:</strong> ${r.datasetObj['รับย้าย']||0} | <strong>จำหน่าย:</strong> ${r.datasetObj['จำหน่าย']||0} | <strong>ย้ายไป:</strong> ${r.datasetObj['ย้ายไป']||0}</p>
-                <p style="margin:5px 0 0 0;"><strong>ตาย:</strong> ${r.datasetObj['ตาย']||0} | <strong>ส่งต่อ:</strong> ${r.datasetObj['ส่งต่อ']||0} | <strong>ไม่สมัครใจ:</strong> ${r.datasetObj['ไม่สมัครใจอยู่']||0}</p>
-                <p style="margin:5px 0 0 0;"><strong style="color:#DC2626;">ยอดคงพยาบาลสุทธิ: ${r.netCount} ราย</strong> (ประเภท1: ${r.datasetObj['ประเภท 1']||0}, ประเภท2: ${r.datasetObj['ประเภท 2']||0}, ประเภท3: ${r.datasetObj['ประเภท 3']||0}, ประเภท4: ${r.datasetObj['ประเภท 4']||0})</p>
-                <p style="margin:5px 0 0 0;"><strong>คะแนนภาระงาน:</strong> ${r.datasetObj['คะแนนภาระงาน']||0} (${r.datasetObj['สถานะภาระงาน']||'-'})</p>
-            </div>
-            <div style="background: #F8FAFC; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #CBD5E1;">
-                <h4 class="prompt-text" style="color: #4C1D95; margin: 0 0 10px 0; font-size: 22px;">2. อุบัติการณ์ และความเสี่ยงประจำเวร</h4>
-                <p style="margin:0;"><strong>สรุปเหตุการณ์:</strong> ${r.datasetObj['อุบัติการณ์'] || 'เหตุการณ์ทั่วไปปกติ'}</p>
-                <p style="margin:5px 0 0 0;"><strong>รายละเอียด Refer 24 ชม:</strong> ${r.datasetObj['รายละเอียด Refer 24 ชม.'] || '-'}</p>
-                <p style="margin:5px 0 0 0;"><strong>รายละเอียด Case Refer:</strong> ${r.datasetObj['รายละเอียด Refer'] || '-'}</p>
-                <p style="margin:5px 0 0 0;"><strong>รายละเอียด Case Dead:</strong> ${r.datasetObj['รายละเอียด Dead'] || '-'}</p>
-                <p style="margin:5px 0 0 0;"><strong>รายละเอียด ผู้ป่วยประเภท 4:</strong> ${r.datasetObj['รายละเอียด Type 4'] || '-'}</p>
-            </div>
-            <h4 class="prompt-text" style="color: #4C1D95; margin: 20px 0 10px 0; font-size: 22px;">3. สรุปหัตถการและกิจกรรมพยาบาล</h4>
-            <table width="100%" border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; border-color: #CBD5E1; font-size: 20px;">
-            `;
-            let count = 0; html += `<tr>`;
-            for(let key in r.datasetObj) {
-                if(typeof r.datasetObj[key] === 'number') {
-                    html += `<td><strong>${key}:</strong> ${r.datasetObj[key]}</td>`;
-                    count++; if(count % 4 === 0) html += `</tr><tr>`;
-                }
-            }
-            while(count % 4 !== 0) { html += `<td></td>`; count++; }
-            html += `</tr></table>`;
-            html += `<div style="margin-top: 15px;"><p style="margin:0;"><strong>รายชื่อปฏิบัติหน้าที่:</strong> พยาบาล1: ${r.datasetObj['พยาบาล 1']||'-'}, พยาบาล2: ${r.datasetObj['พยาบาล 2']||'-'}, ผู้ช่วยเหลือ: ${r.datasetObj['ผู้ช่วยเหลือคนไข้']||'-'}, ตรวจการ: ${r.datasetObj['พยาบาลตรวจการ']||'-'}</p></div>`;
-            return html;
         }
 
         // --- 6. ระบบตารางประวัติบันทึกข้อมูล (History Diary & Delete Control) ---
@@ -1016,7 +1057,7 @@
             
             const start = document.getElementById('hist-start').value;
             const end = document.getElementById('hist-end').value;
-            const sort = document.getElementById('hist-sort').value;
+            const sortOrder = document.getElementById('hist-sort').value;
 
             let filtered = localDiaryStorage.filter(item => {
                 if (start && end) return item.date >= start && item.date <= end;
@@ -1029,7 +1070,7 @@
             const shiftOrder = { "ดึก": 1, "เช้า": 2, "บ่าย": 3 };
             filtered.sort((a, b) => {
                 let dateDiff = a.date > b.date ? -1 : (a.date < b.date ? 1 : 0);
-                if(sort === 'asc') dateDiff = dateDiff * -1;
+                if(sortOrder === 'asc') dateDiff = dateDiff * -1;
                 if(dateDiff === 0) return shiftOrder[a.shift] - shiftOrder[b.shift];
                 return dateDiff;
             });
@@ -1055,10 +1096,8 @@
             if(!r) return;
             document.getElementById('edit-id').value = r.uid;
             
-            // 1. เคลียร์กล่องเลือกความเสี่ยงก่อนทำการดึงค่าใหม่
             document.querySelectorAll('.inc-chk').forEach(c => { c.checked = false; let inp = c.closest('.incident-item').querySelector('.incident-detail-input'); inp.style.display = 'none'; inp.value = ''; inp.removeAttribute('required'); inp.classList.remove('error-input'); });
             
-            // 2. แปลงข้อความอุบัติการณ์กลับมาเป็น Checkbox และ Input text
             let incStr = r.datasetObj['อุบัติการณ์'] || "";
             if(incStr && incStr !== "เหตุการณ์ทั่วไปปกติ") {
                 let parts = incStr.split(' | ');
@@ -1076,7 +1115,6 @@
                 });
             }
 
-            // 3. ใส่ค่าลงในฟิลด์ข้อมูลทั่วไปทั้งหมด
             document.querySelectorAll('.data-field').forEach(f => {
                 let lbl = f.getAttribute('data-label');
                 if(lbl && r.datasetObj[lbl] !== undefined) f.value = r.datasetObj[lbl];
@@ -1100,7 +1138,18 @@
 
         function viewPreview(uid) {
             const r = localDiaryStorage.find(i => String(i.uid).trim() === String(uid).trim());
-            let html = `<div style="text-align:left; font-size:18px; line-height: 1.8;">` + buildTemplateHTML(r) + `</div>`;
+            populatePrintPages(r);
+            
+            // นำเนื้อหา 3 หน้ามาต่อกันแสดงเป็นพรีวิว
+            let html = `
+                <div style="text-align:left; font-size:18px; line-height: 1.8;">
+                    ${document.getElementById('print-page-1').innerHTML}
+                    <hr style="margin: 20px 0; border: 2px dashed #CBD5E1;">
+                    ${document.getElementById('print-page-2').innerHTML}
+                    <hr style="margin: 20px 0; border: 2px dashed #CBD5E1;">
+                    ${document.getElementById('print-page-3').innerHTML}
+                </div>
+            `;
             showModal(`ดูข้อมูลเวร ${r.shift} วันที่ ${r.date}`, html, 'info');
             document.getElementById('modalDesc').innerHTML = html;
         }
@@ -1110,39 +1159,30 @@
             if(!r) return;
             showModal('กำลังสร้างไฟล์...', 'รอสักครู่ ระบบกำลังวาดเอกสารใหม่...', 'info');
 
-            document.getElementById('rt-subtitle').innerText = `วันที่ ${r.date} | เวร ${r.shift}`;
-            document.getElementById('rt-content').innerHTML = buildTemplateHTML(r);
-            document.getElementById('rt-signatures').innerHTML = populateSignaturesHtml(r.rn);
-            
-            const renderDiv = document.getElementById('render-template');
+            populatePrintPages(r);
             window.scrollTo(0,0);
 
             setTimeout(async () => {
                 try {
-                    const canvas = await html2canvas(renderDiv, { scale: 2, useCORS: true });
-                    const img = canvas.toDataURL('image/jpeg', 0.95);
                     closeModal();
-                    
                     if(type === 'jpeg') {
+                        // เจเนอเรทภาพยาวแบบรวมกันหมดให้ JPEG
+                        const renderDiv = document.getElementById('render-template');
+                        const canvas = await html2canvas(renderDiv, { scale: 2, useCORS: true, backgroundColor: '#FFFFFF' });
                         let link = document.createElement('a'); link.download = `IPD_${r.date}_${r.shift}.jpg`;
-                        link.href = img; link.click();
+                        link.href = canvas.toDataURL('image/jpeg', 0.95); link.click();
                     } else {
+                        // แยกทีละแผ่นลง PDF
                         const { jsPDF } = window.jspdf; 
                         const pdf = new jsPDF('p', 'mm', 'a4');
-                        
                         const pdfWidth = pdf.internal.pageSize.getWidth();
-                        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-                        const pageHeight = 295;
                         
-                        let heightLeft = pdfHeight - pageHeight;
-                        let position = 0;
-                        
-                        pdf.addImage(img, 'JPEG', 0, position, pdfWidth, pdfHeight);
-                        while (heightLeft > 0) {
-                            position -= pageHeight;
-                            pdf.addPage();
-                            pdf.addImage(img, 'JPEG', 0, position, pdfWidth, pdfHeight);
-                            heightLeft -= pageHeight;
+                        for (let i = 1; i <= 3; i++) {
+                            const canvas = await html2canvas(document.getElementById('print-page-' + i), { scale: 2, useCORS: true });
+                            const img = canvas.toDataURL('image/jpeg', 1.0);
+                            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                            if (i > 1) pdf.addPage();
+                            pdf.addImage(img, 'JPEG', 0, 0, pdfWidth, pdfHeight);
                         }
                         
                         pdf.save(`IPD_${r.date}_${r.shift}.pdf`);
@@ -1200,6 +1240,8 @@
             const start = document.getElementById('sum-start').value;
             const end = document.getElementById('sum-end').value;
             const filterType = document.getElementById('sum-incident').value;
+            const sortOrder = document.getElementById('sum-sort').value;
+            
             const sumBody = document.getElementById('event-summary-body');
             sumBody.innerHTML = '';
             
@@ -1208,6 +1250,15 @@
                 if (start) return item.date >= start;
                 if (end) return item.date <= end;
                 return true;
+            });
+
+            // เรียงลำดับจากเก่าไปใหม่ / ใหม่ไปเก่า ตาม Dropdown หน้า HOME
+            const shiftOrder = { "ดึก": 1, "เช้า": 2, "บ่าย": 3 };
+            filtered.sort((a, b) => {
+                let dateDiff = a.date > b.date ? -1 : (a.date < b.date ? 1 : 0);
+                if(sortOrder === 'asc') dateDiff = dateDiff * -1;
+                if(dateDiff === 0) return shiftOrder[a.shift] - shiftOrder[b.shift];
+                return dateDiff;
             });
 
             let countFound = 0;
@@ -1310,7 +1361,7 @@
                     
                     const pdfWidth = pdf.internal.pageSize.getWidth(); 
                     const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-                    const pageHeight = 205; // ความสูงหน้า A4 แนวนอน ลบขอบเพื่อความปลอดภัย
+                    const pageHeight = 205; 
                     
                     let heightLeft = pdfHeight - pageHeight;
                     let position = 0;
