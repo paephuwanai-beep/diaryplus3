@@ -174,6 +174,25 @@
         .spinner { border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid #D8B4FE; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom:15px;}
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
+        /* =========================================================================
+           PRINT TEMPLATE STYLES - บังคับสีขาวดำ 100% ป้องกัน CSS Glassmorphism ทะลุ
+           ========================================================================= */
+        .print-page { 
+            width: 850px; 
+            min-height: 1202px; /* อัตราส่วนหน้า A4 พอดีเป๊ะ */
+            background-color: #FFFFFF !important; 
+            padding: 50px; 
+            box-sizing: border-box; 
+            color: #000000 !important; 
+            font-family: 'Sarabun', sans-serif;
+            position: relative;
+        }
+        .print-page * { 
+            color: #000000 !important; 
+            border-color: #000000 !important; 
+        }
+        /* ยกเว้นหัวข้อหลักที่ยังคงต้องการให้เป็นสีม่วงเข้ม */
+        .print-page .prompt-text-title { color: #4C1D95 !important; }
     </style>
 </head>
 <body>
@@ -591,7 +610,7 @@
     </div>
 
     <div id="customModal" class="modal-overlay">
-        <div class="modal-box">
+        <div class="modal-box" id="modal-container-box">
             <h3 id="modalTitle" class="prompt-text" style="font-size: 24px; margin-bottom: 10px; color: #1E293B;"></h3>
             <div id="modalDesc" style="font-size: 18px; color: #475569; margin-bottom: 25px; line-height: 1.6; white-space: pre-wrap; text-align: left; font-family: 'Sarabun';"></div>
             <div id="modalActions" style="text-align: right;"></div>
@@ -600,26 +619,26 @@
 
     <div id="render-template" style="position: absolute; left: -9999px; top: 0; width: 850px; font-family: 'Sarabun', sans-serif; z-index: -10; background-color: #FFFFFF;">
         
-        <div id="print-page-1" class="print-page" style="min-height: 1122px; background-color: #FFFFFF; color: #000000; padding: 50px;">
-            <div style="text-align: center; border-bottom: 3px solid #000000; padding-bottom: 15px; margin-bottom: 20px;">
-                <h2 class="prompt-text" style="color: #4C1D95; margin:0; font-size: 30px;">ระบบบันทึกเหตุการณ์ประจำเวร</h2>
-                <h3 class="prompt-text" style="color: #000000; margin:5px 0 0 0; font-size: 24px;">ผู้ป่วยในชาย โรงพยาบาลคอนสาร</h3>
-                <p id="rt-subtitle-p1" style="font-size: 20px; font-weight: 600; margin: 10px 0 0 0; color: #000000;">วันที่ -- | เวร --</p>
+        <div id="print-page-1" class="print-page" style="width: 850px; min-height: 1202px; background-color: #FFFFFF !important; color: #000000 !important; padding: 50px; box-sizing: border-box;">
+            <div style="text-align: center; border-bottom: 3px solid #000000 !important; padding-bottom: 15px; margin-bottom: 20px;">
+                <h2 class="prompt-text prompt-text-title" style="margin:0; font-size: 30px;">ระบบบันทึกเหตุการณ์ประจำเวร</h2>
+                <h3 class="prompt-text" style="color: #000000 !important; margin:5px 0 0 0; font-size: 24px;">ผู้ป่วยในชาย โรงพยาบาลคอนสาร</h3>
+                <p id="rt-subtitle-p1" style="font-size: 20px; font-weight: 600; margin: 10px 0 0 0; color: #000000 !important;">วันที่ -- | เวร --</p>
             </div>
-            <div id="rt-content-p1" style="font-size: 20px; line-height: 1.5; color: #000000;"></div>
+            <div id="rt-content-p1" style="font-size: 20px; line-height: 1.5; color: #000000 !important;"></div>
         </div>
 
-        <div id="print-page-2" class="print-page" style="min-height: 1122px; background-color: #FFFFFF; color: #000000; padding: 50px;">
-            <div style="text-align: center; border-bottom: 3px solid #000000; padding-bottom: 15px; margin-bottom: 20px;">
-                <h2 class="prompt-text" style="color: #4C1D95; margin:0; font-size: 30px;">ระบบบันทึกเหตุการณ์ประจำเวร (ต่อ)</h2>
-                <p id="rt-subtitle-p2" style="font-size: 20px; font-weight: 600; margin: 10px 0 0 0; color: #000000;">วันที่ -- | เวร --</p>
+        <div id="print-page-2" class="print-page" style="width: 850px; min-height: 1202px; background-color: #FFFFFF !important; color: #000000 !important; padding: 50px; box-sizing: border-box;">
+            <div style="text-align: center; border-bottom: 3px solid #000000 !important; padding-bottom: 15px; margin-bottom: 20px;">
+                <h2 class="prompt-text prompt-text-title" style="margin:0; font-size: 30px;">ระบบบันทึกเหตุการณ์ประจำเวร (ต่อ)</h2>
+                <p id="rt-subtitle-p2" style="font-size: 20px; font-weight: 600; margin: 10px 0 0 0; color: #000000 !important;">วันที่ -- | เวร --</p>
             </div>
-            <div id="rt-content-p2" style="font-size: 20px; line-height: 1.5; color: #000000;"></div>
+            <div id="rt-content-p2" style="font-size: 20px; line-height: 1.5; color: #000000 !important;"></div>
         </div>
 
-        <div id="print-page-3" class="print-page" style="min-height: 1122px; background-color: #FFFFFF; color: #000000; padding: 50px;">
-            <div id="rt-content-p3" style="font-size: 20px; line-height: 1.5; color: #000000;"></div>
-            <div id="rt-signatures" style="margin-top: 40px; padding-right: 50px; font-size: 20px; color: #000000;"></div>
+        <div id="print-page-3" class="print-page" style="width: 850px; min-height: 1202px; background-color: #FFFFFF !important; color: #000000 !important; padding: 50px; box-sizing: border-box;">
+            <div id="rt-content-p3" style="font-size: 20px; line-height: 1.5; color: #000000 !important;"></div>
+            <div id="rt-signatures" style="margin-top: 40px; padding-right: 50px; font-size: 20px; color: #000000 !important;"></div>
         </div>
 
     </div>
@@ -629,7 +648,7 @@
         let localDiaryStorage = JSON.parse(localStorage.getItem('ipd3_diary_storage')) || [];
         let myChart = null;
 
-        // อัลกอริทึมจัดเรียงข้อมูลแบบรัดกุม 100% (เทียบวันที่แบบสตริง + น้ำหนักเวร)
+        // 🎯 อัลกอริทึมจัดเรียงข้อมูลแบบรัดกุม 100% (เทียบวันที่แบบสตริง + น้ำหนักเวร)
         const shiftOrderWeights = { "ดึก": 1, "เช้า": 2, "บ่าย": 3 };
         function sortRecords(arr, sortOrderStr = 'desc') {
             return arr.sort((a, b) => {
@@ -649,7 +668,7 @@
             });
         }
         
-        // --- 1. ระบบซิงค์ข้อมูล ---
+        // --- 1. ระบบซิงค์ข้อมูล (🎯 แก้บัคการสร้าง UID ไม่ตรงกัน) ---
         async function loadDataFromSheet() {
             try {
                 const response = await fetch(WEB_APP_URL);
@@ -694,6 +713,7 @@
                         };
                     });
                     
+                    // เรียงลำดับเริ่มต้น ใหม่ล่าสุดมาไว้บนสุด
                     localDiaryStorage = sortRecords(newStorage, 'desc');
                     localStorage.setItem('ipd3_diary_storage', JSON.stringify(localDiaryStorage));
                 }
@@ -759,12 +779,22 @@
         }
 
         function showModal(title, desc, type='info', onConfirm=null) {
+            // ปรับกล่อง Modal ให้กว้างขึ้นเวลาแสดงพรีวิวรูป
+            let box = document.getElementById('modal-container-box');
+            if(type === 'preview') {
+                box.style.maxWidth = "900px";
+            } else {
+                box.style.maxWidth = "500px";
+            }
+            
             document.getElementById('modalTitle').innerText = title; 
             document.getElementById('modalDesc').innerHTML = desc;
             let actions = document.getElementById('modalActions');
             if(onConfirm) {
                 actions.innerHTML = `<button class="btn btn-ghost" onclick="closeModal()">ยกเลิก</button> <button class="btn btn-danger" id="btnConfirm">ยืนยัน</button>`;
                 document.getElementById('btnConfirm').onclick = () => { onConfirm(); closeModal(); };
+            } else if (type === 'preview') {
+                 // ปุ่มสำหรับหน้า preview สร้างผ่านโค้ดด้านล่างแล้ว
             } else { 
                 actions.innerHTML = `<button class="btn btn-primary" onclick="closeModal()">ตกลง</button>`; 
             }
@@ -839,10 +869,10 @@
             window.scrollTo(0,0);
         }
 
-        // ดึงของล่าสุดเป๊ะๆ จาก Array index 0
+        // 🎯 ดึงของล่าสุดเป๊ะๆ จาก Array index 0
         function viewLatestRecord() {
             if (localDiaryStorage && localDiaryStorage.length > 0) {
-                // อาร์เรย์ถูกเรียงเป็น ใหม่ที่สุดไว้ตัวบนเสมอ
+                // อาร์เรย์ถูกเรียงให้เวรใหม่ล่าสุดอยู่ Index 0 เสมอ
                 viewPreview(localDiaryStorage[0].uid);
             } else {
                 showModal('แจ้งเตือน', 'ยังไม่มีประวัติการบันทึกข้อมูล', 'warning');
@@ -900,40 +930,40 @@
         }
 
         // --- 5. ฟังก์ชันใส่ข้อมูลลงไปในโครง HTML สำหรับวาดภาพ ---
-        // *** บังคับ In-line CSS เป็นสีดำทั้งหมด เพื่อให้ html2canvas จับคู่สีได้เป๊ะ 100% ***
+        // 🎯 บังคับ In-line CSS เป็นสีดำทั้งหมด เพื่อให้ html2canvas จับคู่สีได้เป๊ะ 100%
         function populateSignaturesHtml(rnName) {
             let saved = JSON.parse(localStorage.getItem('ipd3_settings')) || defaultSettings;
             let html = `
-                <div style="display: flex; justify-content: flex-end; margin-bottom: 50px; color: #000000;">
-                    <div style="text-align: center; color: #000000;">
+                <div style="display: flex; justify-content: flex-end; margin-bottom: 50px; color: #000000 !important;">
+                    <div style="text-align: center; color: #000000 !important;">
                         <br>
-                        <p style="color: #000000; margin:0;">ลงชื่อ.......................................................ผู้บันทึก</p>
-                        <p style="font-weight:600; margin:5px 0 0 0; color: #000000;">( ${rnName} )</p>
-                        <p style="color: #000000; margin:0;">พยาบาลวิชาชีพ</p>
+                        <p style="color: #000000 !important; margin:0;">ลงชื่อ.......................................................ผู้บันทึก</p>
+                        <p style="font-weight:600; margin:5px 0 0 0; color: #000000 !important;">( ${rnName} )</p>
+                        <p style="color: #000000 !important; margin:0;">พยาบาลวิชาชีพ</p>
                     </div>
                 </div>
-                <div style="display: flex; justify-content: flex-end; margin-bottom: 50px; color: #000000;">
-                    <div style="text-align: center; color: #000000;">
-                        <p style="color: #000000; margin:0;">ลงชื่อ.......................................................</p>
-                        <p style="font-weight:600; margin:5px 0 0 0; color: #000000;">( ${saved.sign1Name} )</p>
-                        <p style="color: #000000; margin:0;">${saved.sign1Acad}</p>
-                        <p style="color: #000000; margin:0;">${saved.sign1Pos}</p>
+                <div style="display: flex; justify-content: flex-end; margin-bottom: 50px; color: #000000 !important;">
+                    <div style="text-align: center; color: #000000 !important;">
+                        <p style="color: #000000 !important; margin:0;">ลงชื่อ.......................................................</p>
+                        <p style="font-weight:600; margin:5px 0 0 0; color: #000000 !important;">( ${saved.sign1Name} )</p>
+                        <p style="color: #000000 !important; margin:0;">${saved.sign1Acad}</p>
+                        <p style="color: #000000 !important; margin:0;">${saved.sign1Pos}</p>
                     </div>
                 </div>
-                <div style="display: flex; justify-content: flex-end; margin-bottom: 50px; color: #000000;">
-                    <div style="text-align: center; color: #000000;">
-                        <p style="color: #000000; margin:0;">ลงชื่อ.......................................................</p>
-                        <p style="font-weight:600; margin:5px 0 0 0; color: #000000;">( ${saved.sign2Name} )</p>
-                        <p style="color: #000000; margin:0;">${saved.sign2Acad}</p>
-                        <p style="color: #000000; margin:0;">${saved.sign2Pos}</p>
+                <div style="display: flex; justify-content: flex-end; margin-bottom: 50px; color: #000000 !important;">
+                    <div style="text-align: center; color: #000000 !important;">
+                        <p style="color: #000000 !important; margin:0;">ลงชื่อ.......................................................</p>
+                        <p style="font-weight:600; margin:5px 0 0 0; color: #000000 !important;">( ${saved.sign2Name} )</p>
+                        <p style="color: #000000 !important; margin:0;">${saved.sign2Acad}</p>
+                        <p style="color: #000000 !important; margin:0;">${saved.sign2Pos}</p>
                     </div>
                 </div>
-                <div style="display: flex; justify-content: flex-end; color: #000000;">
-                    <div style="text-align: center; color: #000000;">
-                        <p style="color: #000000; margin:0;">ลงชื่อ.......................................................</p>
-                        <p style="font-weight:600; margin:5px 0 0 0; color: #000000;">( ${saved.sign3Name} )</p>
-                        <p style="color: #000000; margin:0;">${saved.sign3Acad}</p>
-                        <p style="color: #000000; margin:0;">${saved.sign3Pos}</p>
+                <div style="display: flex; justify-content: flex-end; color: #000000 !important;">
+                    <div style="text-align: center; color: #000000 !important;">
+                        <p style="color: #000000 !important; margin:0;">ลงชื่อ.......................................................</p>
+                        <p style="font-weight:600; margin:5px 0 0 0; color: #000000 !important;">( ${saved.sign3Name} )</p>
+                        <p style="color: #000000 !important; margin:0;">${saved.sign3Acad}</p>
+                        <p style="color: #000000 !important; margin:0;">${saved.sign3Pos}</p>
                     </div>
                 </div>
             `;
@@ -946,42 +976,42 @@
             
             // หน้าที่ 1 (บังคับสีดำทั้งหมด)
             let p1 = `
-            <div style="background-color: #FFFFFF; color: #000000; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #000000;">
-                <h4 class="prompt-text" style="color: #4C1D95; margin: 0 0 10px 0; font-size: 22px; font-weight:bold;">1. สถิติผู้ป่วยและภาระงาน</h4>
-                <p style="margin:0; color: #000000;"><strong style="color: #000000;">ยอดยกมา:</strong> ${r.datasetObj['ยอดยกมา']||0} | <strong style="color: #000000;">รับใหม่:</strong> ${r.datasetObj['รับใหม่']||0} | <strong style="color: #000000;">รับย้าย:</strong> ${r.datasetObj['รับย้าย']||0} | <strong style="color: #000000;">จำหน่าย:</strong> ${r.datasetObj['จำหน่าย']||0} | <strong style="color: #000000;">ย้ายไป:</strong> ${r.datasetObj['ย้ายไป']||0}</p>
-                <p style="margin:5px 0 0 0; color: #000000;"><strong style="color: #000000;">ตาย:</strong> ${r.datasetObj['ตาย']||0} | <strong style="color: #000000;">ส่งต่อ:</strong> ${r.datasetObj['ส่งต่อ']||0} | <strong style="color: #000000;">ไม่สมัครใจ:</strong> ${r.datasetObj['ไม่สมัครใจอยู่']||0}</p>
-                <p style="margin:5px 0 0 0; color: #000000;"><strong style="color:#DC2626;">ยอดคงพยาบาลสุทธิ: ${r.netCount} ราย</strong> (ประเภท1: ${r.datasetObj['ประเภท 1']||0}, ประเภท2: ${r.datasetObj['ประเภท 2']||0}, ประเภท3: ${r.datasetObj['ประเภท 3']||0}, ประเภท4: ${r.datasetObj['ประเภท 4']||0})</p>
-                <p style="margin:5px 0 0 0; color: #000000;"><strong style="color: #000000;">คะแนนภาระงาน:</strong> ${r.datasetObj['คะแนนภาระงาน']||0} (${r.datasetObj['สถานะภาระงาน']||'-'})</p>
+            <div style="background-color: #FFFFFF !important; color: #000000 !important; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #000000 !important;">
+                <h4 class="prompt-text" style="color: #4C1D95 !important; margin: 0 0 10px 0; font-size: 22px; font-weight:bold;">1. สถิติผู้ป่วยและภาระงาน</h4>
+                <p style="margin:0; color: #000000 !important;"><strong style="color: #000000 !important;">ยอดยกมา:</strong> ${r.datasetObj['ยอดยกมา']||0} | <strong style="color: #000000 !important;">รับใหม่:</strong> ${r.datasetObj['รับใหม่']||0} | <strong style="color: #000000 !important;">รับย้าย:</strong> ${r.datasetObj['รับย้าย']||0} | <strong style="color: #000000 !important;">จำหน่าย:</strong> ${r.datasetObj['จำหน่าย']||0} | <strong style="color: #000000 !important;">ย้ายไป:</strong> ${r.datasetObj['ย้ายไป']||0}</p>
+                <p style="margin:5px 0 0 0; color: #000000 !important;"><strong style="color: #000000 !important;">ตาย:</strong> ${r.datasetObj['ตาย']||0} | <strong style="color: #000000 !important;">ส่งต่อ:</strong> ${r.datasetObj['ส่งต่อ']||0} | <strong style="color: #000000 !important;">ไม่สมัครใจ:</strong> ${r.datasetObj['ไม่สมัครใจอยู่']||0}</p>
+                <p style="margin:5px 0 0 0; color: #000000 !important;"><strong style="color:#DC2626 !important;">ยอดคงพยาบาลสุทธิ: ${r.netCount} ราย</strong> (ประเภท1: ${r.datasetObj['ประเภท 1']||0}, ประเภท2: ${r.datasetObj['ประเภท 2']||0}, ประเภท3: ${r.datasetObj['ประเภท 3']||0}, ประเภท4: ${r.datasetObj['ประเภท 4']||0})</p>
+                <p style="margin:5px 0 0 0; color: #000000 !important;"><strong style="color: #000000 !important;">คะแนนภาระงาน:</strong> ${r.datasetObj['คะแนนภาระงาน']||0} (${r.datasetObj['สถานะภาระงาน']||'-'})</p>
             </div>
-            <div style="background-color: #FFFFFF; color: #000000; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #000000;">
-                <h4 class="prompt-text" style="color: #4C1D95; margin: 0 0 10px 0; font-size: 22px; font-weight:bold;">2. อุบัติการณ์ และความเสี่ยงประจำเวร</h4>
-                <p style="margin:0; color: #000000;"><strong style="color: #000000;">สรุปเหตุการณ์:</strong> ${r.datasetObj['อุบัติการณ์'] || 'เหตุการณ์ทั่วไปปกติ'}</p>
-                <p style="margin:5px 0 0 0; color: #000000;"><strong style="color: #000000;">รายละเอียด Refer 24 ชม:</strong> ${r.datasetObj['รายละเอียด Refer 24 ชม.'] || '-'}</p>
-                <p style="margin:5px 0 0 0; color: #000000;"><strong style="color: #000000;">รายละเอียด Case Refer:</strong> ${r.datasetObj['รายละเอียด Refer'] || '-'}</p>
-                <p style="margin:5px 0 0 0; color: #000000;"><strong style="color: #000000;">รายละเอียด Case Dead:</strong> ${r.datasetObj['รายละเอียด Dead'] || '-'}</p>
-                <p style="margin:5px 0 0 0; color: #000000;"><strong style="color: #000000;">รายละเอียด ผู้ป่วยประเภท 4:</strong> ${r.datasetObj['รายละเอียด Type 4'] || '-'}</p>
+            <div style="background-color: #FFFFFF !important; color: #000000 !important; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #000000 !important;">
+                <h4 class="prompt-text" style="color: #4C1D95 !important; margin: 0 0 10px 0; font-size: 22px; font-weight:bold;">2. อุบัติการณ์ และความเสี่ยงประจำเวร</h4>
+                <p style="margin:0; color: #000000 !important;"><strong style="color: #000000 !important;">สรุปเหตุการณ์:</strong> ${r.datasetObj['อุบัติการณ์'] || 'เหตุการณ์ทั่วไปปกติ'}</p>
+                <p style="margin:5px 0 0 0; color: #000000 !important;"><strong style="color: #000000 !important;">รายละเอียด Refer 24 ชม:</strong> ${r.datasetObj['รายละเอียด Refer 24 ชม.'] || '-'}</p>
+                <p style="margin:5px 0 0 0; color: #000000 !important;"><strong style="color: #000000 !important;">รายละเอียด Case Refer:</strong> ${r.datasetObj['รายละเอียด Refer'] || '-'}</p>
+                <p style="margin:5px 0 0 0; color: #000000 !important;"><strong style="color: #000000 !important;">รายละเอียด Case Dead:</strong> ${r.datasetObj['รายละเอียด Dead'] || '-'}</p>
+                <p style="margin:5px 0 0 0; color: #000000 !important;"><strong style="color: #000000 !important;">รายละเอียด ผู้ป่วยประเภท 4:</strong> ${r.datasetObj['รายละเอียด Type 4'] || '-'}</p>
             </div>
             `;
             document.getElementById('rt-content-p1').innerHTML = p1;
 
             // หน้าที่ 2 (ตารางขอบดำ ตัวหนังสือดำ)
             let p2 = `
-            <h4 class="prompt-text" style="color: #4C1D95; margin: 20px 0 10px 0; font-size: 22px; font-weight:bold;">3. สรุปหัตถการและกิจกรรมพยาบาล</h4>
-            <table width="100%" border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; border-color: #000000; font-size: 20px; color: #000000; background-color: #FFFFFF;">
+            <h4 class="prompt-text" style="color: #4C1D95 !important; margin: 20px 0 10px 0; font-size: 22px; font-weight:bold;">3. สรุปหัตถการและกิจกรรมพยาบาล</h4>
+            <table width="100%" border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; border-color: #000000 !important; font-size: 20px; color: #000000 !important; background-color: #FFFFFF !important;">
             `;
             let count = 0; p2 += `<tr>`;
             for(let key in r.datasetObj) {
                 if(typeof r.datasetObj[key] === 'number') {
-                    p2 += `<td style="width: 25%; border: 1px solid #000000; color: #000000;"><strong style="color: #000000;">${key}:</strong> ${r.datasetObj[key]}</td>`;
+                    p2 += `<td style="width: 25%; border: 1px solid #000000 !important; color: #000000 !important;"><strong style="color: #000000 !important;">${key}:</strong> ${r.datasetObj[key]}</td>`;
                     count++; if(count % 4 === 0) p2 += `</tr><tr>`;
                 }
             }
-            while(count % 4 !== 0) { p2 += `<td style="width: 25%; border: 1px solid #000000; color: #000000;"></td>`; count++; }
+            while(count % 4 !== 0) { p2 += `<td style="width: 25%; border: 1px solid #000000 !important; color: #000000 !important;"></td>`; count++; }
             p2 += `</tr></table>`;
             document.getElementById('rt-content-p2').innerHTML = p2;
 
             // หน้าที่ 3
-            let p3 = `<div style="margin-bottom: 30px; color: #000000;"><p style="margin:0; font-size: 20px; color: #000000;"><strong style="color: #000000;">รายชื่อปฏิบัติหน้าที่:</strong> พยาบาล1: ${r.datasetObj['พยาบาล 1']||'-'}, พยาบาล2: ${r.datasetObj['พยาบาล 2']||'-'}, ผู้ช่วยเหลือ: ${r.datasetObj['ผู้ช่วยเหลือคนไข้']||'-'}, ตรวจการ: ${r.datasetObj['พยาบาลตรวจการ']||'-'}</p></div>`;
+            let p3 = `<div style="margin-bottom: 30px; color: #000000 !important;"><p style="margin:0; font-size: 20px; color: #000000 !important;"><strong style="color: #000000 !important;">รายชื่อปฏิบัติหน้าที่:</strong> พยาบาล1: ${r.datasetObj['พยาบาล 1']||'-'}, พยาบาล2: ${r.datasetObj['พยาบาล 2']||'-'}, ผู้ช่วยเหลือ: ${r.datasetObj['ผู้ช่วยเหลือคนไข้']||'-'}, ตรวจการ: ${r.datasetObj['พยาบาลตรวจการ']||'-'}</p></div>`;
             document.getElementById('rt-content-p3').innerHTML = p3;
             document.getElementById('rt-signatures').innerHTML = populateSignaturesHtml(r.rn);
         }
@@ -1033,7 +1063,6 @@
                     const pdfWidth = pdf.internal.pageSize.getWidth();
                     
                     for (let i = 1; i <= 3; i++) {
-                        // บังคับ background ขาวอีกครั้งใน html2canvas เผื่อเหนียว
                         const canvas = await html2canvas(document.getElementById('print-page-' + i), { scale: 2, useCORS: true, backgroundColor: '#FFFFFF' });
                         const img = canvas.toDataURL('image/jpeg', 1.0);
                         const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
@@ -1060,7 +1089,7 @@
             }, 500);
         }
 
-        // --- 6. ระบบตารางประวัติบันทึกข้อมูล (แก้บัคการเรียง) ---
+        // --- 6. ระบบตารางประวัติบันทึกข้อมูล ---
         function renderDiaryRowsTable() {
             const tb = document.getElementById('diary-rows');
             tb.innerHTML = '';
@@ -1140,23 +1169,35 @@
             });
         }
 
-        function viewPreview(uid) {
+        // 🎯 ฟังก์ชันดูพรีวิว โชว์ภาพจำลองเสมือนจริงเป๊ะๆ เพื่อให้ข้อมูลครบถ้วนแน่นอน
+        async function viewPreview(uid) {
             const r = localDiaryStorage.find(i => String(i.uid).trim() === String(uid).trim());
             if(!r) return showModal('Error', 'ไม่พบข้อมูลที่ต้องการดูตัวอย่าง', 'danger');
             
+            showModal('กำลังโหลดพรีวิว...', '<div style="text-align:center; padding: 20px;"><div class="spinner" style="margin: 0 auto; border-top-color: #4C1D95;"></div><p style="margin-top:15px; color:#4C1D95; font-weight:bold;">กำลังสร้างภาพตัวอย่าง 3 หน้า กรุณารอสักครู่...</p></div>', 'preview');
+            document.getElementById('modalActions').innerHTML = ''; // ซ่อนปุ่มขณะโหลด
+
             populatePrintPages(r);
-            
-            // นำเนื้อหาทั้ง 3 หน้ามาต่อกันแสดงเป็นพรีวิว โดยบังคับพื้นขาวอีกชั้นเผื่อกลืนไปกับ Modal
-            let html = `
-                <div style="text-align:left; font-size:18px; line-height: 1.8; color: #000; background: #FFF; padding: 20px; border-radius: 10px;">
-                    ${document.getElementById('print-page-1').innerHTML}
-                    <hr style="margin: 20px 0; border: 2px dashed #CBD5E1;">
-                    ${document.getElementById('print-page-2').innerHTML}
-                    <hr style="margin: 20px 0; border: 2px dashed #CBD5E1;">
-                    ${document.getElementById('print-page-3').innerHTML}
-                </div>
-            `;
-            showModal(`ตัวอย่างเอกสาร - วันที่ ${r.date} เวร ${r.shift}`, html, 'info');
+            window.scrollTo(0,0); // ป้องกันบัคพื้นที่ตอนวาดรูป
+
+            setTimeout(async () => {
+                try {
+                    let htmlImgs = '<div style="text-align:center; background:#F1F5F9; padding:15px; border-radius:10px; max-height:65vh; overflow-y:auto;">';
+                    
+                    for (let i = 1; i <= 3; i++) {
+                        const canvas = await html2canvas(document.getElementById('print-page-' + i), { scale: 1.5, useCORS: true, backgroundColor: '#FFFFFF' });
+                        htmlImgs += `<img src="${canvas.toDataURL('image/jpeg', 0.95)}" style="width:100%; max-width:800px; margin-bottom:15px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); border: 1px solid #CBD5E1;">`;
+                    }
+                    htmlImgs += '</div>';
+
+                    document.getElementById('modalTitle').innerText = `ตัวอย่างเอกสาร - วันที่ ${r.date} เวร ${r.shift}`;
+                    document.getElementById('modalDesc').innerHTML = htmlImgs;
+                    document.getElementById('modalActions').innerHTML = `<button class="btn btn-primary" onclick="closeModal()">ปิดหน้าต่าง</button>`;
+                } catch(e) {
+                    document.getElementById('modalDesc').innerHTML = `<p style="color:red; font-weight:bold;">เกิดข้อผิดพลาด: ${e}</p>`;
+                    document.getElementById('modalActions').innerHTML = `<button class="btn btn-primary" onclick="closeModal()">ปิดหน้าต่าง</button>`;
+                }
+            }, 300);
         }
 
         async function regenerateFile(uid, type) {
@@ -1207,7 +1248,7 @@
             }, 500);
         }
 
-        // --- 7. DASHBOARD & SUMMARY INTERACTIVE TABLE (แก้บัคการเรียง) ---
+        // --- 7. DASHBOARD & SUMMARY INTERACTIVE TABLE ---
         function updateDashboard() {
             document.getElementById('home-date').innerText = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
 
@@ -1362,7 +1403,6 @@
         async function exportRiskPDF() {
             const target = document.getElementById('risk-export-target');
             
-            // บังคับให้เป็นพื้นขาว ตัวหนังสือดำก่อนถ่าย (สำหรับความเสี่ยง)
             let originalBg = target.style.background;
             let originalColor = target.style.color;
             target.style.background = "#FFFFFF";
