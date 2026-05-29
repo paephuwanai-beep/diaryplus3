@@ -27,13 +27,24 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body { 
-            font-family: 'Sarabun', sans-serif; font-size: 18px; line-height: 1.5; 
+            font-family: 'Sarabun', sans-serif; 
+            font-size: 18px; 
+            line-height: 1.5; 
             background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%); 
-            background-attachment: fixed; color: #F8FAFC; min-height: 100vh; display: flex; 
+            background-attachment: fixed; 
+            color: #F8FAFC; 
+            min-height: 100vh; 
+            display: flex; 
         }
         
-        body::before { content: ''; position: fixed; top: 10%; left: 20%; width: 400px; height: 400px; background: rgba(147, 51, 234, 0.15); border-radius: 50%; filter: blur(100px); z-index: -1; }
-        body::after { content: ''; position: fixed; bottom: 10%; right: 10%; width: 300px; height: 300px; background: rgba(99, 102, 241, 0.15); border-radius: 50%; filter: blur(80px); z-index: -1; }
+        body::before {
+            content: ''; position: fixed; top: 10%; left: 20%; width: 400px; height: 400px;
+            background: rgba(147, 51, 234, 0.15); border-radius: 50%; filter: blur(100px); z-index: -1;
+        }
+        body::after {
+            content: ''; position: fixed; bottom: 10%; right: 10%; width: 300px; height: 300px;
+            background: rgba(99, 102, 241, 0.15); border-radius: 50%; filter: blur(80px); z-index: -1;
+        }
 
         .prompt-text { font-family: 'Prompt', sans-serif; }
 
@@ -49,6 +60,7 @@
         .blinking-smooth { animation: blinker 2s ease-in-out infinite; color: #E9D5FF; font-weight: 600; letter-spacing: 1px;}
         @keyframes blinker { 50% { opacity: 0.3; } }
 
+        /* SIDEBAR */
         .sidebar { 
             width: var(--sidebar-width); background: rgba(11, 15, 25, 0.65); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             border-right: 1px solid rgba(255, 255, 255, 0.08); height: 100vh; position: fixed; display: flex; flex-direction: column; 
@@ -78,6 +90,7 @@
             .main-content { margin-left: 0; width: 100%; padding: 15px; }
         }
 
+        /* PANELS */
         .glass-panel { 
             background: var(--panel-bg); backdrop-filter: blur(20px) saturate(150%); -webkit-backdrop-filter: blur(20px) saturate(150%);
             border: 1px solid var(--glass-border); color: var(--panel-text); border-radius: 20px; padding: 30px; margin-bottom: 25px; 
@@ -85,6 +98,7 @@
         }
         .section-title { font-family: 'Prompt', sans-serif; font-size: 18px; color: #4C1D95; background: rgba(243, 232, 255, 0.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); padding: 10px 18px; border-radius: 10px; margin: 25px 0 15px 0; font-weight: 600; border-left: 5px solid var(--accent-purple); display: flex; align-items: center; gap: 10px;}
 
+        /* FORMS */
         .data-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
         .form-control { margin-bottom: 12px; }
         .form-control label { display: block; font-size: 16px; color: #334155; margin-bottom: 6px; font-weight: 600; font-family: 'Sarabun', sans-serif;}
@@ -104,6 +118,7 @@
         .incident-item input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer;}
         .incident-detail-input { display: none; background: #FFF !important; border-color: #A78BFA !important; }
 
+        /* CARDS (HOME) */
         .home-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 35px; }
         .card { 
             padding: 25px; border-radius: 20px; color: white; display: flex; flex-direction: column; justify-content: center; 
@@ -115,6 +130,7 @@
         .card-value { font-size: 38px; font-weight: 700; font-family: 'Prompt', sans-serif; line-height: 1.2;}
         .card-bg-icon { position: absolute; right: -15px; bottom: -20px; font-size: 110px; opacity: 0.15; }
 
+        /* TABLES */
         .data-table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 15px; text-align: left; font-size: 16px; font-family: 'Sarabun', sans-serif;}
         .data-table th { padding: 14px; border-bottom: 2px solid rgba(226, 232, 240, 0.6); color: #4C1D95; font-weight: 600; font-family: 'Prompt', sans-serif; background: rgba(248, 250, 252, 0.6); backdrop-filter: blur(5px);}
         .data-table td { padding: 14px; border-bottom: 1px solid rgba(226, 232, 240, 0.6); color: #1E293B; vertical-align: top; line-height: 1.6;}
@@ -129,6 +145,7 @@
         .multi-select-box label { display: flex; align-items: flex-start; gap: 10px; font-size: 15px; color: #334155; font-weight: 400; cursor: pointer; margin-bottom: 10px; font-family: 'Sarabun'; }
         .multi-select-box input[type="checkbox"] { width: 18px; height: 18px; margin-top: 2px; }
 
+        /* BUTTONS */
         .btn { border: none; border-radius: 12px; padding: 12px 20px; font-weight: 500; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Prompt', sans-serif; font-size: 15px; }
         .btn-primary { background: linear-gradient(135deg, var(--accent-purple) 0%, #6366F1 100%); color: #FFF; box-shadow: 0 4px 15px rgba(139,92,246,0.3); border: 1px solid rgba(255,255,255,0.2);}
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(139,92,246,0.4);}
@@ -144,6 +161,7 @@
         .sub-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* MODAL */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 2000; justify-content: center; align-items: center; overflow-y: auto;}
         .modal-box { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.5); border-radius: 24px; padding: 35px; width: 95%; margin: 40px auto; box-shadow: 0 25px 50px rgba(0,0,0,0.25); animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: #1E293B;}
         @keyframes modalPop { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
@@ -156,9 +174,7 @@
         .spinner { border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid #D8B4FE; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom:15px;}
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* =========================================================================
-           PRINT TEMPLATE STYLES - บังคับสีขาวดำ 100% ถอดแบบตามรูปภาพ
-           ========================================================================= */
+        /* PRINT TEMPLATE STYLES */
         #render-template { background-color: #FFFFFF !important; }
         .print-page { 
             width: 850px; min-height: 1202px; background-color: #FFFFFF !important; 
@@ -430,7 +446,7 @@
             </div>
 
             <div style="display: flex; gap: 15px; margin-top: 20px;">
-                <button class="btn btn-primary" id="save-btn" onclick="executeSaveProcess()" style="font-size: 18px; padding: 15px 30px;"><i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูล & โหลด PDF</button>
+                <button class="btn btn-primary" id="save-btn" onclick="executeSaveProcess()" style="font-size: 18px; padding: 15px 30px;"><i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูล</button>
                 <button class="btn btn-ghost" onclick="resetForm()"><i class="fa-solid fa-rotate-left"></i> ล้างข้อมูลฟอร์มใหม่</button>
             </div>
         </section>
@@ -625,7 +641,6 @@
         let localDiaryStorage = JSON.parse(localStorage.getItem('ipd3_diary_storage')) || [];
         let myChart = null;
 
-        // 🎯 อัลกอริทึมจัดเรียงข้อมูลแบบรัดกุม 100% (เทียบวันที่แบบสตริง + น้ำหนักเวร)
         const shiftOrderWeights = { "ดึก": 1, "เช้า": 2, "บ่าย": 3 };
         function sortRecords(arr, sortOrderStr = 'desc') {
             return arr.sort((a, b) => {
@@ -645,7 +660,6 @@
             });
         }
         
-        // 🎯 ดักจับรูปแบบวันที่ (เผื่อ Google Sheet ส่งค่าแปลกๆ มา)
         function parseSheetDate(rawDate) {
             if (!rawDate) return "2026-01-01";
             let dStr = String(rawDate).trim();
@@ -660,7 +674,6 @@
             return dStr;
         }
 
-        // --- 1. ระบบซิงค์ข้อมูล (🎯 แก้บัคการสร้าง UID ไม่ตรงกัน) ---
         async function loadDataFromSheet() {
             try {
                 const response = await fetch(WEB_APP_URL);
@@ -686,7 +699,6 @@
                         
                         let recordUID = (uidIndex !== -1 && row[uidIndex]) ? String(row[uidIndex]).trim() : '';
                         
-                        // สร้าง UID ป้องกันการซ้ำกันเด็ดขาด
                         if (!recordUID || seenUIDs.has(recordUID)) {
                             recordUID = 'UID_' + Date.now() + '_' + index;
                         }
@@ -707,7 +719,6 @@
                         };
                     });
                     
-                    // เรียงลำดับเริ่มต้น ใหม่ล่าสุดมาไว้บนสุด
                     localDiaryStorage = sortRecords(newStorage, 'desc');
                     localStorage.setItem('ipd3_diary_storage', JSON.stringify(localDiaryStorage));
                 }
@@ -718,7 +729,6 @@
             updateDashboard(); updateSummaryTable(); updateRiskReviewTable();
         }
 
-        // --- 2. การจัดการ Dropdown รายชื่อพนักงาน และ ตั้งค่าลายเซ็น ---
         let defaultSettings = {
             rn: "ปราณี RN, สมหญิง RN, พิเชษฐ์ RN, สมชาย RN, สุดา RN, วิไล RN, วินัยRN, ปริญญาภรณ์RN",
             na: "ทวีศักดิ์ NA, มานะ NA",
@@ -787,7 +797,7 @@
                 actions.innerHTML = `<button class="btn btn-ghost" onclick="closeModal()">ยกเลิก</button> <button class="btn btn-danger" id="btnConfirm">ยืนยัน</button>`;
                 document.getElementById('btnConfirm').onclick = () => { onConfirm(); closeModal(); };
             } else if (type === 'preview') {
-                 // ใส่ปุ่มปิดใน innerHTML ของ ModalDesc ไปแล้ว
+                 
             } else { 
                 actions.innerHTML = `<button class="btn btn-primary" onclick="closeModal()">ตกลง</button>`; 
             }
@@ -862,7 +872,6 @@
             window.scrollTo(0,0);
         }
 
-        // 🎯 ดึงของล่าสุดเป๊ะๆ จาก Array index 0
         function viewLatestRecord() {
             if (localDiaryStorage && localDiaryStorage.length > 0) {
                 viewPreview(localDiaryStorage[0].uid);
@@ -871,7 +880,6 @@
             }
         }
 
-        // --- 4. การคำนวณคณิตศาสตร์และประเมินสถิติ ---
         function runLiveCalc() {
             const sumIn = ['v-yok', 'v-new', 'v-movin'].reduce((s, id) => s + (parseInt(document.getElementById(id).value)||0), 0);
             const sumOut = ['v-dis', 'v-movout', 'v-ama', 'v-dead', 'v-ref'].reduce((s, id) => s + (parseInt(document.getElementById(id).value)||0), 0);
@@ -921,8 +929,6 @@
             return { isValid, errText };
         }
 
-        // --- 5. ฟังก์ชันใส่ข้อมูลลงไปในโครง HTML สำหรับวาดภาพ ---
-        // 🎯 บังคับ In-line CSS เป็นสีดำทั้งหมด เพื่อให้ html2canvas จับคู่สีได้เป๊ะ 100%
         function populateSignaturesHtml(rnName) {
             let saved = JSON.parse(localStorage.getItem('ipd3_settings')) || defaultSettings;
             let html = `
@@ -966,7 +972,6 @@
             document.getElementById('rt-subtitle-p1').innerText = `วันที่ ${r.date} | เวร ${r.shift}`;
             document.getElementById('rt-subtitle-p2').innerText = `วันที่ ${r.date} | เวร ${r.shift}`;
             
-            // หน้าที่ 1 (บังคับสีดำทั้งหมด)
             let p1 = `
             <div style="background-color: #FFFFFF !important; color: #000000 !important; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #000000 !important;">
                 <h4 class="prompt-text" style="color: #4C1D95 !important; margin: 0 0 10px 0; font-size: 22px; font-weight:bold;">1. สถิติผู้ป่วยและภาระงาน</h4>
@@ -986,7 +991,6 @@
             `;
             document.getElementById('rt-content-p1').innerHTML = p1;
 
-            // หน้าที่ 2 (ตารางขอบดำ ตัวหนังสือดำ)
             let p2 = `
             <h4 class="prompt-text" style="color: #4C1D95 !important; margin: 20px 0 10px 0; font-size: 22px; font-weight:bold;">3. สรุปหัตถการและกิจกรรมพยาบาล</h4>
             <table width="100%" border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; border-color: #000000 !important; font-size: 20px; color: #000000 !important; background-color: #FFFFFF !important;">
@@ -1002,12 +1006,12 @@
             p2 += `</tr></table>`;
             document.getElementById('rt-content-p2').innerHTML = p2;
 
-            // หน้าที่ 3
             let p3 = `<div style="margin-bottom: 30px; color: #000000 !important;"><p style="margin:0; font-size: 20px; color: #000000 !important;"><strong style="color: #000000 !important;">รายชื่อปฏิบัติหน้าที่:</strong> พยาบาล1: ${r.datasetObj['พยาบาล 1']||'-'}, พยาบาล2: ${r.datasetObj['พยาบาล 2']||'-'}, ผู้ช่วยเหลือ: ${r.datasetObj['ผู้ช่วยเหลือคนไข้']||'-'}, ตรวจการ: ${r.datasetObj['พยาบาลตรวจการ']||'-'}</p></div>`;
             document.getElementById('rt-content-p3').innerHTML = p3;
             document.getElementById('rt-signatures').innerHTML = populateSignaturesHtml(r.rn);
         }
 
+        // 🎯 แก้ไข: ให้บันทึกข้อมูลอย่างเดียว ไม่ดาวน์โหลดไฟล์อัตโนมัติ
         async function executeSaveProcess() {
             if(document.getElementById('sum-warning').style.display === 'block') {
                 return showModal('ข้อมูลคลาดเคลื่อน', 'กรุณาตรวจยอดประเภทผู้ป่วย 1-4 ให้ตรงกับยอดคงพยาบาลก่อนบันทึกครับ', 'danger');
@@ -1016,7 +1020,7 @@
             if(!v.isValid) return showModal('ข้อมูลไม่ครบถ้วน', v.errText, 'danger');
 
             const btn = document.getElementById('save-btn');
-            btn.disabled = true; btn.innerText = "กำลังประมวลผล...";
+            btn.disabled = true; btn.innerText = "กำลังบันทึกข้อมูล...";
 
             let dataObj = {}; let dataArr = [];
             document.querySelectorAll('.data-field').forEach(f => {
@@ -1045,44 +1049,29 @@
             localDiaryStorage = sortRecords(localDiaryStorage, 'desc');
             localStorage.setItem('ipd3_diary_storage', JSON.stringify(localDiaryStorage));
 
-            populatePrintPages(logItem);
-            window.scrollTo(0,0);
+            let payload = {
+                action: isEditMode ? "update" : "add",
+                uid: logItem.uid, date: logItem.date, shift: logItem.shift, rn: logItem.rn,
+                datasetObj: dataObj, rowValues: dataArr
+            };
             
-            setTimeout(async () => {
-                try {
-                    const { jsPDF } = window.jspdf; 
-                    const pdf = new jsPDF('p', 'mm', 'a4');
-                    const pdfWidth = pdf.internal.pageSize.getWidth();
-                    
-                    for (let i = 1; i <= 3; i++) {
-                        const canvas = await html2canvas(document.getElementById('print-page-' + i), { scale: 2, useCORS: true, backgroundColor: '#FFFFFF' });
-                        const img = canvas.toDataURL('image/jpeg', 1.0);
-                        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-                        
-                        if (i > 1) pdf.addPage();
-                        pdf.addImage(img, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-                    }
-                    
-                    pdf.save(`IPD_${logItem.date}_${logItem.shift}.pdf`);
-
-                    let payload = {
-                        action: isEditMode ? "update" : "add",
-                        uid: logItem.uid, date: logItem.date, shift: logItem.shift, rn: logItem.rn,
-                        datasetObj: dataObj, rowValues: dataArr
-                    };
-                    
-                    // 👉 ส่งข้อมูลไป Google Apps Script โดยใช้ UID อ้างอิงแถวที่ถูกต้อง
-                    fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
-                    .catch(err => console.log("Post execution log:", err));
-                    
-                    showModal('บันทึกและสร้าง PDF สำเร็จ', 'ข้อมูลถูกบันทึกเข้าระบบ Sheets เรียบร้อย และดาวน์โหลด PDF แบ่ง 3 หน้าสมบูรณ์', 'success');
-                    resetForm(); showTab('history'); updateDashboard(); updateSummaryTable(); updateRiskReviewTable();
-                } catch(e) { alert("Error PDF: " + e); }
-                btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> บันทึกเข้าระบบ & โหลด PDF`;
-            }, 500);
+            // ส่งข้อมูลไป Google Apps Script ทันที ไม่ต้องรอวาดไฟล์
+            fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+            .catch(err => console.log("Post execution log:", err));
+            
+            showModal('บันทึกสำเร็จ', 'ข้อมูลถูกบันทึกเข้าระบบเรียบร้อยแล้ว คุณสามารถโหลดไฟล์ได้ที่หน้าประวัติบันทึก (Diary)', 'success');
+            
+            resetForm(); 
+            showTab('history'); 
+            updateDashboard(); 
+            updateSummaryTable(); 
+            updateRiskReviewTable();
+            
+            btn.disabled = false; 
+            btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูล`;
+            window.scrollTo(0,0);
         }
 
-        // --- 6. ระบบตารางประวัติบันทึกข้อมูล (แก้บัคการเรียง) ---
         function renderDiaryRowsTable() {
             const tb = document.getElementById('diary-rows');
             tb.innerHTML = '';
@@ -1162,16 +1151,15 @@
             });
         }
 
-        // 🎯 ฟังก์ชันดูพรีวิว โชว์ภาพจำลองเสมือนจริงเป๊ะๆ เพื่อให้ข้อมูลครบถ้วนแน่นอน
         async function viewPreview(uid) {
             const r = localDiaryStorage.find(i => String(i.uid).trim() === String(uid).trim());
             if(!r) return showModal('Error', 'ไม่พบข้อมูลที่ต้องการดูตัวอย่าง', 'danger');
             
             showModal('กำลังโหลดพรีวิว...', '<div style="text-align:center; padding: 20px;"><div class="spinner" style="margin: 0 auto; border-top-color: #4C1D95;"></div><p style="margin-top:15px; color:#4C1D95; font-weight:bold;">กำลังสร้างภาพตัวอย่าง 3 หน้า กรุณารอสักครู่...</p></div>', 'preview');
-            document.getElementById('modalActions').innerHTML = ''; // ซ่อนปุ่มขณะโหลด
+            document.getElementById('modalActions').innerHTML = ''; 
 
             populatePrintPages(r);
-            window.scrollTo(0,0); // ป้องกันบัคพื้นที่ตอนวาดรูป
+            window.scrollTo(0,0); 
 
             setTimeout(async () => {
                 try {
@@ -1190,7 +1178,7 @@
                     document.getElementById('modalDesc').innerHTML = `<p style="color:red; font-weight:bold;">เกิดข้อผิดพลาด: ${e}</p>`;
                     document.getElementById('modalActions').innerHTML = `<button class="btn btn-primary" onclick="closeModal()">ปิดหน้าต่าง</button>`;
                 }
-            }, 500);
+            }, 300);
         }
 
         async function regenerateFile(uid, type) {
@@ -1205,7 +1193,6 @@
                 try {
                     closeModal();
                     if(type === 'jpeg') {
-                        // ภาพยาว 1 แผ่นเต็ม สำหรับ JPEG
                         const renderDiv = document.createElement('div');
                         renderDiv.style.backgroundColor = '#FFFFFF';
                         renderDiv.style.color = '#000000';
@@ -1223,7 +1210,6 @@
                         let link = document.createElement('a'); link.download = `IPD_${r.date}_${r.shift}.jpg`;
                         link.href = canvas.toDataURL('image/jpeg', 0.95); link.click();
                     } else {
-                        // แยก 3 หน้า PDF
                         const { jsPDF } = window.jspdf; 
                         const pdf = new jsPDF('p', 'mm', 'a4');
                         const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -1241,7 +1227,6 @@
             }, 500);
         }
 
-        // --- 7. DASHBOARD & SUMMARY INTERACTIVE TABLE (แก้บัคการเรียง) ---
         function updateDashboard() {
             document.getElementById('home-date').innerText = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
 
@@ -1337,7 +1322,6 @@
             if(countFound === 0) sumBody.innerHTML = '<tr><td colspan="6" align="center">ไม่มีข้อมูลตรงกับเงื่อนไขที่เลือก</td></tr>';
         }
 
-        // --- 8. RISK MANAGEMENT LOGIC ---
         function switchRiskTab(tabId) {
             document.querySelectorAll('#risk .sub-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('#risk .sub-nav-btn').forEach(el => el.classList.remove('active'));
@@ -1467,7 +1451,6 @@
             const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `Risk_Review.csv`; link.click();
         }
 
-        // --- 9. SUMMARY EXPORT DATA ---
         function generateSummaryReport() {
             const start = document.getElementById('exp-start').value;
             const end = document.getElementById('exp-end').value;
