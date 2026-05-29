@@ -37,14 +37,8 @@
             display: flex; 
         }
         
-        body::before {
-            content: ''; position: fixed; top: 10%; left: 20%; width: 400px; height: 400px;
-            background: rgba(147, 51, 234, 0.15); border-radius: 50%; filter: blur(100px); z-index: -1;
-        }
-        body::after {
-            content: ''; position: fixed; bottom: 10%; right: 10%; width: 300px; height: 300px;
-            background: rgba(99, 102, 241, 0.15); border-radius: 50%; filter: blur(80px); z-index: -1;
-        }
+        body::before { content: ''; position: fixed; top: 10%; left: 20%; width: 400px; height: 400px; background: rgba(147, 51, 234, 0.15); border-radius: 50%; filter: blur(100px); z-index: -1; }
+        body::after { content: ''; position: fixed; bottom: 10%; right: 10%; width: 300px; height: 300px; background: rgba(99, 102, 241, 0.15); border-radius: 50%; filter: blur(80px); z-index: -1; }
 
         .prompt-text { font-family: 'Prompt', sans-serif; }
 
@@ -174,7 +168,9 @@
         .spinner { border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid #D8B4FE; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom:15px;}
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* PRINT TEMPLATE STYLES */
+        /* =========================================================================
+           PRINT TEMPLATE STYLES - บังคับสีขาวดำ 100% ถอดแบบตามรูปภาพ
+           ========================================================================= */
         #render-template { background-color: #FFFFFF !important; }
         .print-page { 
             width: 850px; min-height: 1202px; background-color: #FFFFFF !important; 
@@ -342,19 +338,23 @@
                     </div>
                 </div>
 
-                <div class="section-title">🏥 2. ข้อมูลประเภทเตียง & ประเภทผู้ป่วย</div>
+                <div class="section-title">🛏️ 2. ข้อมูลประเภทเตียง</div>
                 <div class="data-grid">
                     <div class="form-control"><label>ห้องสามัญ</label><input type="number" class="data-field" data-label="สามัญ" value="0"></div>
                     <div class="form-control"><label>ห้องพิเศษ</label><input type="number" class="data-field" data-label="ห้องพิเศษ" value="0"></div>
                     <div class="form-control"><label>ห้องแยก</label><input type="number" class="data-field" data-label="ห้องแยก" value="0"></div>
+                </div>
+
+                <div class="section-title">🧑‍🤝‍🧑 3. ข้อมูลประเภทผู้ป่วย</div>
+                <div class="data-grid">
                     <div class="form-control"><label>ประเภท 1</label><input type="number" id="vt1" class="data-field t-sum" data-label="ประเภท 1" value="0" oninput="checkTypeSum()"></div>
                     <div class="form-control"><label>ประเภท 2</label><input type="number" id="vt2" class="data-field t-sum" data-label="ประเภท 2" value="0" oninput="checkTypeSum()"></div>
                     <div class="form-control"><label>ประเภท 3</label><input type="number" id="vt3" class="data-field t-sum" data-label="ประเภท 3" value="0" oninput="checkTypeSum()"></div>
                     <div class="form-control"><label>ประเภท 4</label><input type="number" id="vt4" class="data-field t-sum" data-label="ประเภท 4" value="0" oninput="checkTypeSum()"></div>
                 </div>
-                <div id="sum-warning" style="color: #DC2626; font-size: 15px; font-weight: 600; display: none; text-align: center;">* ยอดรวมประเภทไม่สมดุลกับยอดคงพยาบาล!</div>
+                <div id="sum-warning" style="color: #DC2626; font-size: 15px; font-weight: 600; display: none; text-align: center; margin-bottom: 15px;"></div>
 
-                <div class="section-title">🚨 3. รายละเอียดอุบัติการณ์ / ความเสี่ยง</div>
+                <div class="section-title">🚨 4. รายละเอียดอุบัติการณ์ / ความเสี่ยง</div>
                 <div class="form-control">
                     <label style="color: #D97706; font-size: 18px;">อุบัติการณ์และความเสี่ยง (เลือกได้มากกว่า 1 รายการ)</label>
                     <p style="font-size: 14px; color: #64748B; margin-bottom: 10px;">* เมื่อเลือกหัวข้อใด ต้องระบุรายละเอียดในช่องที่ปรากฏขึ้นมาด้วย (บังคับ)</p>
@@ -378,7 +378,7 @@
                     <div class="form-control"><label>รายละเอียด Case ประเภท 4 / วิกฤติ</label><textarea id="v-type4-desc" class="data-field" data-label="รายละเอียด Type 4" rows="2"></textarea></div>
                 </div>
 
-                <div class="section-title">💊 4. บริหารยา & หัตถการพยาบาล (Medications & Procedures)</div>
+                <div class="section-title">💊 5. บริหารยา & หัตถการพยาบาล (Medications & Procedures)</div>
                 <div class="data-grid">
                     <div class="form-control"><label>เปิดเส้น IV , ดูแล IV</label><input type="number" class="data-field" data-label="IV" value="0"></div>
                     <div class="form-control"><label>Obs. N/S</label><input type="number" class="data-field" data-label="N/S" value="0"></div>
@@ -432,7 +432,7 @@
                     <div class="form-control"><label>รายงานแพทย์</label><input type="number" class="data-field" data-label="รายงานแพทย์" value="0"></div>
                 </div>
 
-                <div class="section-title">👩‍⚕️ 5. รายชื่อผู้ปฏิบัติหน้าที่</div>
+                <div class="section-title">👩‍⚕️ 6. รายชื่อผู้ปฏิบัติหน้าที่</div>
                 <div class="data-grid">
                     <div class="form-control"><label style="color: #DC2626;">พยาบาล 1 (บังคับ)</label><select id="dd-rn1" class="data-field" data-label="พยาบาล 1"></select></div>
                     <div class="form-control"><label style="color: #DC2626;">พยาบาล 2 (บังคับ)</label><select id="dd-rn2" class="data-field" data-label="พยาบาล 2"></select></div>
@@ -641,6 +641,18 @@
         let localDiaryStorage = JSON.parse(localStorage.getItem('ipd3_diary_storage')) || [];
         let myChart = null;
 
+        // 🎯 ฟังก์ชันแปลงรูปแบบวันที่ YYYY-MM-DD เป็น วันที่แบบไทย (เช่น 29 พ.ค. 2569)
+        function formatThaiDate(dateStr) {
+            if(!dateStr) return "-";
+            const parts = dateStr.split('-');
+            if(parts.length !== 3) return dateStr;
+            const year = parseInt(parts[0]) + 543;
+            const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+            const month = months[parseInt(parts[1]) - 1] || parts[1];
+            const day = parseInt(parts[2]);
+            return `${day} ${month} ${year}`;
+        }
+
         const shiftOrderWeights = { "ดึก": 1, "เช้า": 2, "บ่าย": 3 };
         function sortRecords(arr, sortOrderStr = 'desc') {
             return arr.sort((a, b) => {
@@ -797,7 +809,7 @@
                 actions.innerHTML = `<button class="btn btn-ghost" onclick="closeModal()">ยกเลิก</button> <button class="btn btn-danger" id="btnConfirm">ยืนยัน</button>`;
                 document.getElementById('btnConfirm').onclick = () => { onConfirm(); closeModal(); };
             } else if (type === 'preview') {
-                 
+                 // ใส่ปุ่มปิดใน innerHTML ของ ModalDesc
             } else { 
                 actions.innerHTML = `<button class="btn btn-primary" onclick="closeModal()">ตกลง</button>`; 
             }
@@ -902,14 +914,28 @@
             if(dead > 0) dDesc.setAttribute('required', 'true'); else { dDesc.removeAttribute('required'); dDesc.classList.remove('error-input'); }
         }
 
+        // 🎯 อัปเดตการแสดงผลแจ้งเตือนที่ชัดเจนขึ้น
         function checkTypeSum() {
             const t1 = parseInt(document.getElementById('vt1').value)||0;
             const t2 = parseInt(document.getElementById('vt2').value)||0;
             const t3 = parseInt(document.getElementById('vt3').value)||0;
             const t4 = parseInt(document.getElementById('vt4').value)||0;
-            const net = parseInt(document.getElementById('remaining-count').innerText);
+            const net = parseInt(document.getElementById('remaining-count').innerText) || 0;
             
-            document.getElementById('sum-warning').style.display = ((t1+t2+t3+t4) !== net) ? 'block' : 'none';
+            const sumWarning = document.getElementById('sum-warning');
+            const sum = t1 + t2 + t3 + t4;
+            
+            if (sum !== net) {
+                sumWarning.style.display = 'block';
+                let diff = sum - net;
+                if (diff > 0) {
+                    sumWarning.innerText = `* ยอดรวมประเภทผู้ป่วย ไม่สมดุล! (ใส่จำนวนเกินมา ${diff} ราย)`;
+                } else {
+                    sumWarning.innerText = `* ยอดรวมประเภทผู้ป่วย ไม่สมดุล! (ยังขาดอีก ${Math.abs(diff)} ราย)`;
+                }
+            } else {
+                sumWarning.style.display = 'none';
+            }
 
             let score = (((t1 * 0.5) + (t2 * 1.166) + (t3 * 1.8333) + (t4 * 2.5)) * 100) / 21;
             document.getElementById('v-workload-score').value = score.toFixed(1);
@@ -969,8 +995,9 @@
         }
 
         function populatePrintPages(r) {
-            document.getElementById('rt-subtitle-p1').innerText = `วันที่ ${r.date} | เวร ${r.shift}`;
-            document.getElementById('rt-subtitle-p2').innerText = `วันที่ ${r.date} | เวร ${r.shift}`;
+            // 🎯 นำ formatThaiDate() มาใช้แสดงผลวันที่
+            document.getElementById('rt-subtitle-p1').innerText = `วันที่ ${formatThaiDate(r.date)} | เวร ${r.shift}`;
+            document.getElementById('rt-subtitle-p2').innerText = `วันที่ ${formatThaiDate(r.date)} | เวร ${r.shift}`;
             
             let p1 = `
             <div style="background-color: #FFFFFF !important; color: #000000 !important; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #000000 !important;">
@@ -1011,10 +1038,9 @@
             document.getElementById('rt-signatures').innerHTML = populateSignaturesHtml(r.rn);
         }
 
-        // 🎯 แก้ไข: ให้บันทึกข้อมูลอย่างเดียว ไม่ดาวน์โหลดไฟล์อัตโนมัติ
         async function executeSaveProcess() {
             if(document.getElementById('sum-warning').style.display === 'block') {
-                return showModal('ข้อมูลคลาดเคลื่อน', 'กรุณาตรวจยอดประเภทผู้ป่วย 1-4 ให้ตรงกับยอดคงพยาบาลก่อนบันทึกครับ', 'danger');
+                return showModal('ข้อมูลคลาดเคลื่อน', 'กรุณาตรวจสอบยอดรวมประเภทผู้ป่วย ให้ตรงกับยอดคงพยาบาลก่อนบันทึกครับ', 'danger');
             }
             let v = validateForm();
             if(!v.isValid) return showModal('ข้อมูลไม่ครบถ้วน', v.errText, 'danger');
@@ -1055,7 +1081,6 @@
                 datasetObj: dataObj, rowValues: dataArr
             };
             
-            // ส่งข้อมูลไป Google Apps Script ทันที ไม่ต้องรอวาดไฟล์
             fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
             .catch(err => console.log("Post execution log:", err));
             
@@ -1091,8 +1116,9 @@
             filtered = sortRecords(filtered, sortOrder);
 
             filtered.forEach(r => {
+                // 🎯 แสดงวันที่เป็นภาษาไทยในตาราง
                 tb.innerHTML += `<tr>
-                    <td>${r.date}</td>
+                    <td>${formatThaiDate(r.date)}</td>
                     <td><span style="background: rgba(226, 232, 240, 0.6); padding: 4px 10px; border-radius: 6px; font-weight: bold; font-size: 15px;">${r.shift}</span></td>
                     <td>${r.rn}</td>
                     <td>
@@ -1171,7 +1197,8 @@
                     }
                     htmlImgs += '</div>';
 
-                    document.getElementById('modalTitle').innerText = `ตัวอย่างเอกสาร - วันที่ ${r.date} เวร ${r.shift}`;
+                    // 🎯 แสดงวันที่เป็นภาษาไทยในชื่อหัวข้อ
+                    document.getElementById('modalTitle').innerText = `ตัวอย่างเอกสาร - วันที่ ${formatThaiDate(r.date)} เวร ${r.shift}`;
                     document.getElementById('modalDesc').innerHTML = htmlImgs;
                     document.getElementById('modalActions').innerHTML = `<button class="btn btn-primary" onclick="closeModal()">ปิดหน้าต่าง</button>`;
                 } catch(e) {
@@ -1309,7 +1336,7 @@
                     countFound++;
                     sumBody.innerHTML += `
                         <tr style="cursor: pointer;" onclick="editRecord('${item.uid}')">
-                            <td>${item.date}</td>
+                            <td>${formatThaiDate(item.date)}</td>
                             <td><span style="background: rgba(226, 232, 240, 0.6); padding: 4px 10px; border-radius: 6px; font-weight: bold; font-size: 15px;">${item.shift}</span></td>
                             <td><div class="tooltip-container">${inc !== 'เหตุการณ์ทั่วไปปกติ' ? 'ดูรายละเอียด' : '-'}<span class="tooltip-text">${inc}</span></div></td>
                             <td><div class="tooltip-container">${isRef ? 'ดูรายละเอียด' : '-'}<span class="tooltip-text">${ref}</span></div></td>
@@ -1364,7 +1391,7 @@
                     countFound++;
                     tbody.innerHTML += `
                         <tr>
-                            <td>${item.date}</td>
+                            <td>${formatThaiDate(item.date)}</td>
                             <td><span style="background: rgba(226, 232, 240, 0.6); padding: 4px 10px; border-radius: 6px; font-weight: bold; font-size: 15px;">${item.shift}</span></td>
                             <td>${inc}</td>
                             <td>${isRef ? ref : '-'}</td>
@@ -1444,7 +1471,8 @@
                     let ref = `"${(item.datasetObj['รายละเอียด Refer'] || '-').replace(/"/g, '""')}"`;
                     let t4 = `"${(item.datasetObj['รายละเอียด Type 4'] || '-').replace(/"/g, '""')}"`;
                     let dead = `"${(item.datasetObj['รายละเอียด Dead'] || '-').replace(/"/g, '""')}"`;
-                    csv += `${item.date},${item.shift},${inc},${ref},${t4},${dead}\n`;
+                    // ใช้ formatThaiDate กับไฟล์ CSV ด้วยเผื่อนำไปดูต่อ
+                    csv += `${formatThaiDate(item.date)},${item.shift},${inc},${ref},${t4},${dead}\n`;
                 }
             });
             const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
@@ -1503,7 +1531,7 @@
 
             if(type === 'csv') {
                 let csv = "วันที่,เวร," + labels.join(",") + "\n";
-                filtered.forEach(row => { csv += `${row.date},${row.shift},` + labels.map(l => row.datasetObj[l] || 0).join(",") + "\n"; });
+                filtered.forEach(row => { csv += `${formatThaiDate(row.date)},${row.shift},` + labels.map(l => row.datasetObj[l] || 0).join(",") + "\n"; });
                 const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
                 const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `Summary_Report_${start}_${end}.csv`; link.click();
             }
