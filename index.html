@@ -432,7 +432,7 @@
             </div>
 
             <div style="display: flex; gap: 15px; margin-top: 20px;">
-                <button class="btn btn-primary" id="save-btn" onclick="executeSaveProcess()" style="font-size: 18px; padding: 15px 30px;"><i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูล & โหลด PDF</button>
+                <button class="btn btn-primary" id="save-btn" onclick="executeSaveProcess()" style="font-size: 18px; padding: 15px 30px;"><i class="fa-solid fa-floppy-disk"></i> บันทึกเข้าระบบ (Save)</button>
                 <button class="btn btn-ghost" onclick="resetForm()"><i class="fa-solid fa-rotate-left"></i> ล้างข้อมูลฟอร์มใหม่</button>
             </div>
         </section>
@@ -628,13 +628,25 @@
             return `${String(d.getDate()).padStart(2, '0')} ${months[d.getMonth()]} ${d.getFullYear() + 543}`;
         }
         
-        // Sorting Logic (เรียง Date และ เวร ดึก(1) เช้า(2) บ่าย(3))
+        // Sorting Logic: แก้ไขให้เรียงลำดับเวรที่ถูกต้อง (ดึก -> เช้า -> บ่าย) 
+        // ถ้าดูแบบ "ใหม่ไปเก่า" (Desc) วันที่ใหม่สุดต้องขึ้นก่อน และในวันเดียวกัน ต้องเรียง บ่าย -> เช้า -> ดึก เพื่อไม่ให้ดึกชนกัน
         function sortRecords(arr, sortMode) {
             const shiftOrder = { "ดึก": 1, "เช้า": 2, "บ่าย": 3 };
             return arr.sort((a, b) => {
-                let dateDiff = a.date > b.date ? -1 : (a.date < b.date ? 1 : 0);
-                if (sortMode === 'asc') dateDiff = dateDiff * -1;
-                if (dateDiff === 0) return shiftOrder[a.shift] - shiftOrder[b.shift];
+                let dateDiff = a.date > b.date ? -1 : (a.date < b.date ? 1 : 0); // Default: -1 (Desc)
+                if (sortMode === 'asc') dateDiff = dateDiff * -1; // ถ้า Asc กลับด้าน
+                
+                if (dateDiff === 0) { // ถ้าเป็นวันเดียวกัน
+                    let shiftA = shiftOrder[a.shift] || 0;
+                    let shiftB = shiftOrder[b.shift] || 0;
+                    // ถ้าเก่าไปใหม่ (Asc): เรียง 1->2->3 (ดึก, เช้า, บ่าย)
+                    // ถ้าใหม่ไปเก่า (Desc): เรียง 3->2->1 (บ่าย, เช้า, ดึก) เพื่อให้เวลาไล่ย้อนกลับเป็นไทม์ไลน์ปกติ
+                    if (sortMode === 'asc') {
+                        return shiftA - shiftB; 
+                    } else {
+                        return shiftB - shiftA; 
+                    }
+                }
                 return dateDiff;
             });
         }
@@ -939,6 +951,7 @@
             return { isValid, errText };
         }
 
+        // ยกเลิกการโหลด PDF อัตโนมัติในฟังก์ชันนี้
         async function executeSaveProcess() {
             if(document.getElementById('sum-warning').style.display === 'block') {
                 return showModal('ข้อมูลคลาดเคลื่อน', 'กรุณาตรวจยอดประเภทผู้ป่วย 1-4 ให้ตรงกับยอดคงพยาบาลก่อนบันทึกครับ', 'danger');
@@ -973,38 +986,25 @@
             let idx = localDiaryStorage.findIndex(i => String(i.uid).trim() === currentUID);
             if(idx > -1) { localDiaryStorage[idx] = logItem; } else { localDiaryStorage.unshift(logItem); }
             
+            // จัดเรียงข้อมูลใหม่หลังบันทึก
             localDiaryStorage = sortRecords(localDiaryStorage, 'desc');
             localStorage.setItem('ipd3_diary_storage', JSON.stringify(localDiaryStorage));
 
-            document.getElementById('rt-subtitle').innerText = `วันที่ ${formatThaiDate(logItem.date)} | เวร ${logItem.shift}`;
-            document.getElementById('rt-content').innerHTML = buildTemplateHTML(logItem);
-            document.getElementById('rt-rn-name').innerText = `( ${logItem.rn} )`;
-            const renderDiv = document.getElementById('render-template');
-            renderDiv.style.left = "0px";
-
-            setTimeout(async () => {
-                try {
-                    const canvas = await html2canvas(renderDiv, { scale: 2 });
-                    renderDiv.style.left = "-9999px";
-                    const img = canvas.toDataURL('image/jpeg', 0.95);
-                    const { jsPDF } = window.jspdf; const pdf = new jsPDF('p', 'mm', 'a4');
-                    const w = pdf.internal.pageSize.getWidth(); const h = (canvas.height * w) / canvas.width;
-                    pdf.addImage(img, 'JPEG', 0, 0, w, h); pdf.save(`IPD_${logItem.date}_${logItem.shift}.pdf`);
-
-                    let payload = {
-                        action: isEditMode ? "update" : "add",
-                        uid: logItem.uid, date: logItem.date, shift: logItem.shift, rn: logItem.rn,
-                        datasetObj: dataObj, rowValues: dataArr
-                    };
-                    
-                    fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
-                    .catch(err => console.log("Post execution log:", err));
-                    
-                    showModal('บันทึกและสร้าง PDF สำเร็จ', 'ข้อมูลถูกบันทึกเข้าระบบ Sheets เรียบร้อย และดาวน์โหลด PDF แล้ว', 'success');
-                    resetForm(); showTab('history'); updateDashboard(); updateSummaryTable(); updateRiskReviewTable();
-                } catch(e) { alert("Error PDF: " + e); renderDiv.style.left = "-9999px"; }
-                btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> บันทึกเข้าระบบ & โหลด PDF`;
-            }, 500);
+            let payload = {
+                action: isEditMode ? "update" : "add",
+                uid: logItem.uid, date: logItem.date, shift: logItem.shift, rn: logItem.rn,
+                datasetObj: dataObj, rowValues: dataArr
+            };
+            
+            // ส่งข้อมูลไปที่ Sheet
+            fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+            .catch(err => console.log("Post execution log:", err));
+            
+            // รีเซ็ตฟอร์มและโชว์ข้อความ
+            showModal('บันทึกสำเร็จ', 'ข้อมูลถูกบันทึกเข้าระบบเรียบร้อยแล้ว (สามารถโหลด PDF ได้ในหน้า Diary)', 'success');
+            resetForm(); showTab('history'); updateDashboard(); updateSummaryTable(); updateRiskReviewTable();
+            
+            btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> บันทึกเข้าระบบ (Save)`;
         }
 
         function buildTemplateHTML(r) {
@@ -1055,6 +1055,7 @@
             });
             if(filtered.length === 0) return tb.innerHTML = `<tr><td colspan="4" align="center">ไม่มีข้อมูลในช่วงเวลาที่เลือก</td></tr>`;
 
+            // เรียกใช้ฟังก์ชัน sortRecords เพื่อจัดเรียงข้อมูลก่อนนำไปแสดงผล
             filtered = sortRecords(filtered, sortMode);
 
             filtered.forEach(r => {
@@ -1265,7 +1266,7 @@
             if(tabId === 'risk-review') updateRiskReviewTable();
         }
 
-        // Risk Review Interactive + Sorting (กดเข้าไปดูได้อย่างเดียว ห้ามแก้)
+        // Risk Review Interactive + Sorting
         function updateRiskReviewTable() {
             const start = document.getElementById('risk-sum-start').value;
             const end = document.getElementById('risk-sum-end').value;
