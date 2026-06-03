@@ -175,34 +175,45 @@
             <p style="text-align: center; color: #E9D5FF; margin-bottom: 35px; font-size: 18px;">เรา คือ มาตรฐาน สร้างสรรงานด้วย AI ถึงใจ สุดพลัง ความหวังของเหล่าท่านชาย</p>
             
             <div class="home-cards">
-                <div class="card" style="background: #F8FAFC; color: #1E293B; border: 1px solid #E2E8F0;" onclick="showTab('record')">
+                <!-- 1. การ์ด วันที่ปัจจุบัน -->
+                <div class="card" style="background: #F8FAFC; color: #1E293B; border: 1px solid #E2E8F0;" onclick="showTab('record')" title="ต้องการไปบันทึกเหตุการณ์เวรใหม่ คลิกเลย">
                     <div class="card-title">วันที่ปัจจุบัน</div>
                     <div class="card-value" id="home-date">-- -- ----</div>
                     <i class="fa-regular fa-calendar card-bg-icon" style="color: #CBD5E1;"></i>
                 </div>
-                <div class="card" style="background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);" onclick="showTab('history')">
+                
+                <!-- 2. การ์ด สถานะภาระงาน -->
+                <div class="card" style="background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);" onclick="showTab('history')" title="ต้องการดูประวัติรายการบันทึก (Diary) คลิกเลย">
                     <div class="card-title">สถานะภาระงาน (เวรล่าสุด)</div>
                     <div class="card-value prompt-text" id="home-workload" style="font-size: 26px; margin-top: 10px;">ไม่มีข้อมูล</div>
                     <div style="font-size: 14px; margin-top: 5px; opacity: 0.8;" id="home-last-shift"></div>
                     <i class="fa-solid fa-user-nurse card-bg-icon"></i>
                 </div>
-                <div class="card" style="background: linear-gradient(135deg, #20C997 0%, #059669 100%);" onclick="showTab('record')">
+                
+                <!-- 3. การ์ด ผู้ป่วยคงพยาบาล -->
+                <div class="card" style="background: linear-gradient(135deg, #20C997 0%, #059669 100%);" onclick="showTab('record')" title="ต้องการดูข้อมูลบันทึกของเวรล่าสุด คลิกเลย">
                     <div class="card-title">ผู้ป่วยคงพยาบาล (เวรล่าสุด)</div>
                     <div class="card-value"><span id="home-ipd">0</span> <span style="font-size: 22px; font-weight: normal; font-family: 'Sarabun';">ราย</span></div>
                     <i class="fa-solid fa-bed-pulse card-bg-icon"></i>
                 </div>
+                
+                <!-- 4. การ์ด แพทย์เวร (ไม่ได้ระบุข้อความเพิ่ม จึงเว้นว่าง title ไว้) -->
                 <div class="card" style="background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);">
                     <div class="card-title">แพทย์เวร (เวรล่าสุด)</div>
                     <div class="card-value prompt-text" id="home-doctor" style="font-size: 24px; margin-top: 10px;">-</div>
                     <i class="fa-solid fa-user-doctor card-bg-icon"></i>
                 </div>
-                <div class="card" style="background: linear-gradient(135deg, #A855F7 0%, #7C3AED 100%);" onclick="showTab('risk')">
+                
+                <!-- 5. การ์ด อุบัติการณ์ & ความเสี่ยง -->
+                <div class="card" style="background: linear-gradient(135deg, #A855F7 0%, #7C3AED 100%);" onclick="showTab('risk')" title="ต้องการดูข้อมูลเฉพาะอุบัติการณ์/ความเสี่ยง คลิกเลย">
                     <div class="card-title">อุบัติการณ์ & ความเสี่ยง (เวรล่าสุด)</div>
                     <div class="marquee-container">
                         <div class="marquee-text prompt-text" id="home-incident" style="font-weight: 600;">เหตุการณ์ทั่วไปปกติ</div>
                     </div>
                 </div>
-                <div class="card" style="background: linear-gradient(135deg, #EC4899 0%, #D946EF 100%);" onclick="window.open('https://ipd3ks.my.canva.site/', '_blank')">
+                
+                <!-- 6. การ์ด IPD3 OS -->
+                <div class="card" style="background: linear-gradient(135deg, #EC4899 0%, #D946EF 100%);" onclick="window.open('https://ipd3ks.my.canva.site/', '_blank')" title="ต้องการไปเว็บแอพ รวมระบบปฏิบัติการ IPD3OS คลิกเลย">
                     <div class="card-value prompt-text" style="font-size: 44px; text-align: center; margin-top: 5px;">IPD3 OS</div>
                     <i class="fa-solid fa-rocket card-bg-icon"></i>
                 </div>
