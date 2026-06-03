@@ -1138,7 +1138,23 @@
             showModal(`ดูข้อมูลเวร ${r.shift} วันที่ ${formatThaiDate(r.date)}`, html, 'info');
             document.getElementById('modalDesc').innerHTML = html;
         }
-
+        
+        // ฟังก์ชันสำหรับเปิดดูตัวอย่างเวรล่าสุด (อ่านอย่างเดียว) เมื่อคลิกการ์ดสีเขียวหน้า Home
+        function viewLatestRecordPreview() {
+            if (localDiaryStorage.length === 0) {
+                return showModal('แจ้งเตือน', 'ยังไม่มีข้อมูลการบันทึกเวรในระบบ', 'warning');
+            }
+            
+            // ดึงข้อมูลทั้งหมดมาเรียงลำดับใหม่ เพื่อหาเวรที่เพิ่งบันทึกล่าสุด (อ้างอิงจาก UID)
+            let sortedByUID = [...localDiaryStorage].sort((a, b) => Number(b.uid) - Number(a.uid));
+            let latest = sortedByUID[0]; 
+            
+            if (latest && latest.uid) {
+                // เรียกใช้ฟังก์ชันดูตัวอย่างเดิมที่สร้างไว้แล้ว
+                viewPreview(latest.uid);
+            }
+        }
+        
         async function regenerateFile(uid, type) {
             const r = localDiaryStorage.find(i => String(i.uid).trim() === String(uid).trim());
             if(!r) return;
