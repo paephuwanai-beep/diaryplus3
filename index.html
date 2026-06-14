@@ -175,14 +175,12 @@
             <p style="text-align: center; color: #E9D5FF; margin-bottom: 35px; font-size: 18px;">เรา คือ มาตรฐาน สร้างสรรงานด้วย AI ถึงใจ สุดพลัง ความหวังของเหล่าท่านชาย</p>
             
             <div class="home-cards">
-                <!-- 1. การ์ด วันที่ปัจจุบัน -->
                 <div class="card" style="background: #F8FAFC; color: #1E293B; border: 1px solid #E2E8F0;" onclick="showTab('record')" title="ต้องการไปบันทึกเหตุการณ์เวรใหม่ คลิกเลย">
                     <div class="card-title">วันที่ปัจจุบัน</div>
                     <div class="card-value" id="home-date">-- -- ----</div>
                     <i class="fa-regular fa-calendar card-bg-icon" style="color: #CBD5E1;"></i>
                 </div>
                 
-                <!-- 2. การ์ด สถานะภาระงาน -->
                 <div class="card" style="background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);" onclick="showTab('history')" title="ต้องการดูประวัติรายการบันทึก (Diary) คลิกเลย">
                     <div class="card-title">สถานะภาระงาน (เวรล่าสุด)</div>
                     <div class="card-value prompt-text" id="home-workload" style="font-size: 26px; margin-top: 10px;">ไม่มีข้อมูล</div>
@@ -190,21 +188,18 @@
                     <i class="fa-solid fa-user-nurse card-bg-icon"></i>
                 </div>
                 
-                <!-- 3. การ์ด ผู้ป่วยคงพยาบาล -->
                 <div class="card" style="background: linear-gradient(135deg, #20C997 0%, #059669 100%);" onclick="viewLatestRecordPreview()" title="ต้องการดูข้อมูลบันทึกของเวรล่าสุด คลิกเลย">
                     <div class="card-title">ผู้ป่วยคงพยาบาล (เวรล่าสุด)</div>
                     <div class="card-value"><span id="home-ipd">0</span> <span style="font-size: 22px; font-weight: normal; font-family: 'Sarabun';">ราย</span></div>
                     <i class="fa-solid fa-bed-pulse card-bg-icon"></i>
                 </div>
                 
-                <!-- 4. การ์ด แพทย์เวร (ไม่ได้ระบุข้อความเพิ่ม จึงเว้นว่าง title ไว้) -->
                 <div class="card" style="background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);">
                     <div class="card-title">แพทย์เวร (เวรล่าสุด)</div>
                     <div class="card-value prompt-text" id="home-doctor" style="font-size: 24px; margin-top: 10px;">-</div>
                     <i class="fa-solid fa-user-doctor card-bg-icon"></i>
                 </div>
                 
-                <!-- 5. การ์ด อุบัติการณ์ & ความเสี่ยง -->
                 <div class="card" style="background: linear-gradient(135deg, #A855F7 0%, #7C3AED 100%);" onclick="showTab('risk')" title="ต้องการดูข้อมูลเฉพาะอุบัติการณ์/ความเสี่ยง คลิกเลย">
                     <div class="card-title">อุบัติการณ์ & ความเสี่ยง (เวรล่าสุด)</div>
                     <div class="marquee-container">
@@ -212,7 +207,6 @@
                     </div>
                 </div>
                 
-                <!-- 6. การ์ด IPD3 OS -->
                 <div class="card" style="background: linear-gradient(135deg, #EC4899 0%, #D946EF 100%);" onclick="window.open('https://ipd3ks.my.canva.site/', '_blank')" title="ต้องการไปเว็บแอพ รวมระบบปฏิบัติการ IPD3OS คลิกเลย">
                     <div class="card-value prompt-text" style="font-size: 44px; text-align: center; margin-top: 5px;">IPD3 OS</div>
                     <i class="fa-solid fa-rocket card-bg-icon"></i>
@@ -301,7 +295,7 @@
                     <div style="background: #F5F3FF; border: 1px solid #DDD6FE; padding: 15px; border-radius: 12px; text-align: center;">
                         <span style="font-size: 16px; font-weight: 600; color: #6D28D9;">คงพยาบาลสุทธิ</span>
                         <div id="remaining-count" class="prompt-text" style="font-size: 44px; font-weight: 700; color: #4C1D95;">0</div>
-                        <input type="hidden" id="v-remain" class="data-field" data-label="คงพยาบาล" value="0">
+                        <input type="number" id="v-remain" class="data-field" data-label="คงพยาบาล" value="0" style="display: none;">
                     </div>
                     <div style="background: #FFF7ED; border: 1px solid #FED7AA; padding: 15px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
                         <span style="font-size: 16px; font-weight: 600; color: #C2410C;">ภาระงานประเมินอัตโนมัติ</span>
@@ -499,12 +493,12 @@
                             <option value="asc">เก่าไปใหม่</option>
                         </select>
                     </div>
-                    <button class="btn btn-primary" style="margin-bottom: 1px;" onclick="exportRiskPDF()"><i class="fa-solid fa-file-pdf"></i> บันทึก PDF</button>
+                    <button class="btn btn-primary" style="margin-bottom: 1px;" onclick="exportRiskPDF()"><i class="fa-solid fa-file-pdf"></i> บันทึก PDF (A4 แนวนอน)</button>
                     <button class="btn" style="background: #10B981; color: white; margin-bottom: 1px;" onclick="exportRiskCSV()"><i class="fa-solid fa-file-csv"></i> ส่งออก CSV</button>
                 </div>
                 <p style="font-size: 14px; color: #64748B; margin-bottom: 15px;">* คลิกที่แถวเพื่อดูรายละเอียดเต็มรูปแบบ (ดูได้อย่างเดียว)</p>
                 <div id="risk-export-target" style="background: white; padding: 25px; border-radius: 12px; border: 1px solid #CBD5E1;">
-                    <h2 class="prompt-text" style="text-align: center; color: #1E293B; margin-bottom: 20px; font-size: 26px;">รายงานทบทวนอุบัติการณ์และความเสี่ยง</h2>
+                    <h2 class="prompt-text" style="text-align: center; color: #1E293B; margin-bottom: 20px; font-size: 26px;">รายงานทบทวนอุบัติการณ์และความเสี่ยงประจำเวร</h2>
                     <div style="overflow-x: auto;">
                         <table class="data-table">
                             <thead><tr><th>วันที่</th><th>เวร</th><th>อุบัติการณ์ / ความเสี่ยง</th><th>Case REFER</th><th>ผู้ป่วยประเภท 4</th><th>Case DEAD</th></tr></thead>
@@ -610,18 +604,10 @@
         </div>
     </div>
 
-    <div id="render-template" style="position: absolute; left: -9999px; background: white; padding: 50px; width: 850px; color: black; font-family: 'Sarabun', sans-serif;">
-        <div style="text-align: center; border-bottom: 3px solid #4C1D95; padding-bottom: 15px; margin-bottom: 20px;">
-            <h2 class="prompt-text" style="color: #4C1D95; margin:0; font-size: 30px;">ระบบบันทึกเหตุการณ์ประจำเวร</h2>
-            <h3 class="prompt-text" style="color: #1E293B; margin:5px 0 0 0; font-size: 24px;">ผู้ป่วยในชาย โรงพยาบาลคอนสาร</h3>
-            <p id="rt-subtitle" style="font-size: 20px; font-weight: 600; margin: 10px 0 0 0;">วันที่ -- | เวร --</p>
-        </div>
-        <div id="rt-content" style="font-size: 20px; line-height: 1.5;"></div>
-        <div style="display: flex; justify-content: space-around; margin-top: 50px; text-align: center; font-size: 18px;">
-            <div><br><br><p>ลงชื่อ.......................................................</p><p id="rt-rn-name" style="font-weight:600; margin-top:5px;">( ผู้บันทึก )</p><p>พยาบาลวิชาชีพ</p></div>
-            <div><p>ลงชื่อ.......................................................</p><p id="rt-sig-hw-name" style="font-weight:600; margin-top:5px;">( นางสาววินัย ชาวเชียงตุง )</p><p id="rt-sig-hw-pos1">พยาบาลวิชาชีพชำนาญการ</p><p id="rt-sig-hw-pos2">หัวหน้างานการพยาบาลผู้ป่วยในชาย</p></div>
-            <div><p>ลงชื่อ.......................................................</p><p id="rt-sig-hn-name" style="font-weight:600; margin-top:5px;">( นางไพเราะ คลองนาวัง )</p><p id="rt-sig-hn-pos1">พยาบาลวิชาชีพชำนาญการ</p><p id="rt-sig-hn-pos2">รักษาการหัวหน้ากลุ่มงานการพยาบาล</p></div>
-        </div>
+    <div id="render-template" style="position: absolute; left: -9999px; background: white; width: 850px; color: black; font-family: 'Sarabun', sans-serif;">
+        <div id="render-p1" style="padding: 40px; background:white;"></div>
+        <div id="render-p2" style="padding: 40px; background:white;"></div>
+        <div id="render-p3" style="padding: 40px; background:white;"></div>
     </div>
 
     <script>
@@ -640,7 +626,6 @@
         }
         
         // Sorting Logic: แก้ไขให้เรียงลำดับเวรที่ถูกต้อง (ดึก -> เช้า -> บ่าย) 
-        // ถ้าดูแบบ "ใหม่ไปเก่า" (Desc) วันที่ใหม่สุดต้องขึ้นก่อน และในวันเดียวกัน ต้องเรียง บ่าย -> เช้า -> ดึก เพื่อไม่ให้ดึกชนกัน
         function sortRecords(arr, sortMode) {
             const shiftOrder = { "ดึก": 1, "เช้า": 2, "บ่าย": 3 };
             return arr.sort((a, b) => {
@@ -650,8 +635,6 @@
                 if (dateDiff === 0) { // ถ้าเป็นวันเดียวกัน
                     let shiftA = shiftOrder[a.shift] || 0;
                     let shiftB = shiftOrder[b.shift] || 0;
-                    // ถ้าเก่าไปใหม่ (Asc): เรียง 1->2->3 (ดึก, เช้า, บ่าย)
-                    // ถ้าใหม่ไปเก่า (Desc): เรียง 3->2->1 (บ่าย, เช้า, ดึก) เพื่อให้เวลาไล่ย้อนกลับเป็นไทม์ไลน์ปกติ
                     if (sortMode === 'asc') {
                         return shiftA - shiftB; 
                     } else {
@@ -688,7 +671,7 @@
                             if(lbl) {
                                 let colIndex = headers.indexOf(lbl);
                                 if(colIndex !== -1) {
-                                    dataObj[lbl] = f.type === 'number' ? parseInt(row[colIndex]) || 0 : row[colIndex];
+                                    dataObj[lbl] = (f.type === 'number' || f.id === 'v-remain') ? parseInt(row[colIndex]) || 0 : row[colIndex];
                                 }
                             }
                         });
@@ -758,14 +741,6 @@
             pop(['dd-rn1', 'dd-rn2'], saved.rn || defaultSettings.rn, false); pop(['dd-rn3', 'dd-rn4'], saved.rn || defaultSettings.rn, true);
             pop(['dd-na1'], saved.na || defaultSettings.na, false); pop(['dd-na2'], saved.na || defaultSettings.na, true);
             pop(['dd-super'], saved.super || defaultSettings.super, true); pop(['dd-doc'], saved.doc || defaultSettings.doc, true);
-            
-            // นำไปใส่ใน template ทันที
-            document.getElementById('rt-sig-hw-name').innerText = saved.sigHwName || defaultSettings.sigHwName;
-            document.getElementById('rt-sig-hw-pos1').innerText = saved.sigHwPos1 || defaultSettings.sigHwPos1;
-            document.getElementById('rt-sig-hw-pos2').innerText = saved.sigHwPos2 || defaultSettings.sigHwPos2;
-            document.getElementById('rt-sig-hn-name').innerText = saved.sigHnName || defaultSettings.sigHnName;
-            document.getElementById('rt-sig-hn-pos1').innerText = saved.sigHnPos1 || defaultSettings.sigHnPos1;
-            document.getElementById('rt-sig-hn-pos2').innerText = saved.sigHnPos2 || defaultSettings.sigHnPos2;
         }
         
         async function saveGlobalSettings() {
@@ -818,7 +793,7 @@
             const dashCheck = document.getElementById('dash-checkboxes');
             let labels = new Set();
             document.querySelectorAll('.data-field').forEach(f => {
-                let lbl = f.getAttribute('data-label'); if(lbl && f.type === 'number') labels.add(lbl);
+                let lbl = f.getAttribute('data-label'); if(lbl && (f.type === 'number' || f.id === 'v-remain')) labels.add(lbl);
             });
             Array.from(labels).forEach((lbl, i) => {
                 dashCheck.innerHTML += `<label><input type="checkbox" value="${lbl}" ${i<4?"checked":""}> ${lbl}</label>`;
@@ -855,7 +830,6 @@
 
         // ระบบคาดเดาเวร
         function suggestNextShift() {
-            // ดึงข้อมูลตัวล่าสุดโดยอิงจาก UID
             let sortedByUID = [...localDiaryStorage].sort((a, b) => Number(b.uid) - Number(a.uid));
             if(sortedByUID.length > 0) {
                 let lastShift = sortedByUID[0].shift;
@@ -900,12 +874,11 @@
             const sumOut = ['v-dis', 'v-movout', 'v-ama', 'v-dead', 'v-ref'].reduce((s, id) => s + (parseInt(document.getElementById(id).value)||0), 0);
             const net = sumIn - sumOut;
             document.getElementById('remaining-count').innerText = net;
-            document.getElementById('v-remain').value = net;
+            document.getElementById('v-remain').value = net; // อัปเดตค่าฟิลด์ซ่อนสำหรับ Export ให้ตรงกัน
             checkTypeSum();
             toggleRequireFields();
         }
 
-        // ระบบเงื่อนไขช่องแสดงผล
         function toggleRequireFields() {
             let ama = parseInt(document.getElementById('v-ama').value)||0;
             let dead = parseInt(document.getElementById('v-dead').value)||0;
@@ -914,20 +887,17 @@
             const chkAma = document.getElementById('chk-ama');
             if(ama > 0 && !chkAma.checked) { chkAma.checked = true; chkAma.dispatchEvent(new Event('change')); }
             
-            // Refer
             let boxRef = document.getElementById('box-refer');
             let rDesc = document.getElementById('v-refer-desc');
             if(ref > 0) { boxRef.style.display = 'block'; rDesc.setAttribute('required', 'true'); } 
             else { boxRef.style.display = 'none'; rDesc.removeAttribute('required'); rDesc.classList.remove('error-input'); }
 
-            // Dead
             let boxDead = document.getElementById('box-dead');
             let dDesc = document.getElementById('v-dead-desc');
             if(dead > 0) { boxDead.style.display = 'block'; dDesc.setAttribute('required', 'true'); } 
             else { boxDead.style.display = 'none'; dDesc.removeAttribute('required'); dDesc.classList.remove('error-input'); }
         }
 
-        // ระบบแจ้งเตือนยอดไม่สมดุล
         function checkTypeSum() {
             const t1 = parseInt(document.getElementById('vt1').value)||0;
             const t2 = parseInt(document.getElementById('vt2').value)||0;
@@ -962,7 +932,6 @@
             return { isValid, errText };
         }
 
-        // ยกเลิกการโหลด PDF อัตโนมัติในฟังก์ชันนี้
         async function executeSaveProcess() {
             if(document.getElementById('sum-warning').style.display === 'block') {
                 return showModal('ข้อมูลคลาดเคลื่อน', 'กรุณาตรวจยอดประเภทผู้ป่วย 1-4 ให้ตรงกับยอดคงพยาบาลก่อนบันทึกครับ', 'danger');
@@ -977,7 +946,7 @@
             document.querySelectorAll('.data-field').forEach(f => {
                 dataArr.push(f.value);
                 let lbl = f.getAttribute('data-label');
-                if(lbl) dataObj[lbl] = (f.type === 'number') ? parseInt(f.value)||0 : f.value;
+                if(lbl) dataObj[lbl] = (f.type === 'number' || f.id === 'v-remain') ? parseInt(f.value)||0 : f.value;
             });
 
             let isEditMode = !!document.getElementById('edit-id').value;
@@ -997,7 +966,6 @@
             let idx = localDiaryStorage.findIndex(i => String(i.uid).trim() === currentUID);
             if(idx > -1) { localDiaryStorage[idx] = logItem; } else { localDiaryStorage.unshift(logItem); }
             
-            // จัดเรียงข้อมูลใหม่หลังบันทึก
             localDiaryStorage = sortRecords(localDiaryStorage, 'desc');
             localStorage.setItem('ipd3_diary_storage', JSON.stringify(localDiaryStorage));
 
@@ -1007,46 +975,119 @@
                 datasetObj: dataObj, rowValues: dataArr
             };
             
-            // ส่งข้อมูลไปที่ Sheet
             fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
             .catch(err => console.log("Post execution log:", err));
             
-            // รีเซ็ตฟอร์มและโชว์ข้อความ
             showModal('บันทึกสำเร็จ', 'ข้อมูลถูกบันทึกเข้าระบบเรียบร้อยแล้ว (สามารถโหลด PDF ได้ในหน้า Diary)', 'success');
             resetForm(); showTab('history'); updateDashboard(); updateSummaryTable(); updateRiskReviewTable();
             
             btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> บันทึกเข้าระบบ (Save)`;
         }
 
-        function buildTemplateHTML(r) {
-            let html = `
+        // PDF Builders - สร้างหน้ากระดาษแบบแยกส่วน
+        function buildHeader(r, pageTitle) {
+            return `
+            <div style="text-align: center; border-bottom: 3px solid #4C1D95; padding-bottom: 15px; margin-bottom: 20px;">
+                <h2 class="prompt-text" style="color: #4C1D95; margin:0; font-size: 30px;">ระบบบันทึกเหตุการณ์ประจำเวร</h2>
+                <h3 class="prompt-text" style="color: #1E293B; margin:5px 0 0 0; font-size: 24px;">ผู้ป่วยในชาย โรงพยาบาลคอนสาร</h3>
+                <p style="font-size: 20px; font-weight: 600; margin: 10px 0 0 0;">วันที่ ${formatThaiDate(r.date)} | เวร ${r.shift}</p>
+                <p style="font-size: 16px; margin: 5px 0 0 0; color: #64748B;">${pageTitle}</p>
+            </div>`;
+        }
+
+        function buildPage1(r) {
+            let html = buildHeader(r, "ส่วนที่ 1: สถิติผู้ป่วยและภาระงาน");
+            html += `<div style="font-size: 20px; line-height: 1.6;">`;
+            html += `<div style="margin-bottom: 15px;"><p style="margin:0;"><strong>รายชื่อผู้ปฏิบัติหน้าที่:</strong></p>
+                     <p style="margin:5px 0 0 20px;">พยาบาล 1: ${r.datasetObj['พยาบาล 1']||'-'} | พยาบาล 2: ${r.datasetObj['พยาบาล 2']||'-'}</p>
+                     <p style="margin:5px 0 0 20px;">ผู้ช่วยเหลือ: ${r.datasetObj['ผู้ช่วยเหลือคนไข้']||'-'} | ตรวจการ: ${r.datasetObj['พยาบาลตรวจการ']||'-'}</p>
+                     </div>`;
+            html += `
             <div style="background: #F8FAFC; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #CBD5E1;">
-                <h4 class="prompt-text" style="color: #4C1D95; margin: 0 0 10px 0; font-size: 22px;">1. สถิติผู้ป่วยและภาระงาน</h4>
+                <h4 class="prompt-text" style="color: #4C1D95; margin: 0 0 10px 0; font-size: 22px;">สถิติผู้ป่วย</h4>
                 <p style="margin:0;"><strong>ยอดยกมา:</strong> ${r.datasetObj['ยอดยกมา']||0} | <strong>รับใหม่:</strong> ${r.datasetObj['รับใหม่']||0} | <strong>รับย้าย:</strong> ${r.datasetObj['รับย้าย']||0} | <strong>จำหน่าย:</strong> ${r.datasetObj['จำหน่าย']||0} | <strong>ย้ายไป:</strong> ${r.datasetObj['ย้ายไป']||0}</p>
                 <p style="margin:5px 0 0 0;"><strong>ตาย:</strong> ${r.datasetObj['ตาย']||0} | <strong>ส่งต่อ:</strong> ${r.datasetObj['ส่งต่อ']||0} | <strong>ไม่สมัครใจ:</strong> ${r.datasetObj['ไม่สมัครใจอยู่']||0}</p>
-                <p style="margin:5px 0 0 0;"><strong style="color:#DC2626;">ยอดคงพยาบาลสุทธิ: ${r.netCount} ราย</strong> (ประเภท1: ${r.datasetObj['ประเภท 1']||0}, ประเภท2: ${r.datasetObj['ประเภท 2']||0}, ประเภท3: ${r.datasetObj['ประเภท 3']||0}, ประเภท4: ${r.datasetObj['ประเภท 4']||0})</p>
-                <p style="margin:5px 0 0 0;"><strong>คะแนนภาระงาน:</strong> ${r.datasetObj['คะแนนภาระงาน']||0} (${r.datasetObj['สถานะภาระงาน']||'-'})</p>
+                <p style="margin:5px 0 0 0;"><strong style="color:#DC2626;">ยอดคงพยาบาลสุทธิ: ${r.netCount} ราย</strong></p>
             </div>
             <div style="background: #F8FAFC; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #CBD5E1;">
-                <h4 class="prompt-text" style="color: #4C1D95; margin: 0 0 10px 0; font-size: 22px;">2. อุบัติการณ์ และความเสี่ยงประจำเวร</h4>
-                <p style="margin:0;"><strong>สรุปเหตุการณ์:</strong> ${r.datasetObj['อุบัติการณ์'] || 'เหตุการณ์ทั่วไปปกติ'}</p>
-                <p style="margin:5px 0 0 0;"><strong>รายละเอียด Refer / 24 ชม:</strong> ${r.datasetObj['รายละเอียด Refer'] || '-'}</p>
-                <p style="margin:5px 0 0 0;"><strong>รายละเอียด Case Dead:</strong> ${r.datasetObj['รายละเอียด Dead'] || '-'}</p>
-                <p style="margin:5px 0 0 0;"><strong>รายละเอียด ผู้ป่วยประเภท 4:</strong> ${r.datasetObj['รายละเอียด Type 4'] || '-'}</p>
+                <h4 class="prompt-text" style="color: #4C1D95; margin: 0 0 10px 0; font-size: 22px;">ประเภทผู้ป่วย</h4>
+                <p style="margin:0;"><strong>ประเภท 1:</strong> ${r.datasetObj['ประเภท 1']||0} | <strong>ประเภท 2:</strong> ${r.datasetObj['ประเภท 2']||0} | <strong>ประเภท 3:</strong> ${r.datasetObj['ประเภท 3']||0} | <strong>ประเภท 4:</strong> ${r.datasetObj['ประเภท 4']||0}</p>
             </div>
-            <h4 class="prompt-text" style="color: #4C1D95; margin: 20px 0 10px 0; font-size: 22px;">3. สรุปหัตถการและกิจกรรมพยาบาล</h4>
-            <table width="100%" border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; border-color: #CBD5E1; font-size: 20px;">
-            `;
+            <div style="background: #F8FAFC; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #CBD5E1;">
+                <h4 class="prompt-text" style="color: #4C1D95; margin: 0 0 10px 0; font-size: 22px;">ประเภทเตียง</h4>
+                <p style="margin:0;"><strong>สามัญ:</strong> ${r.datasetObj['สามัญ']||0} | <strong>ห้องพิเศษ:</strong> ${r.datasetObj['ห้องพิเศษ']||0} | <strong>ห้องแยก:</strong> ${r.datasetObj['ห้องแยก']||0}</p>
+            </div>
+            <div style="background: #FFF7ED; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #FED7AA;">
+                <h4 class="prompt-text" style="color: #C2410C; margin: 0 0 10px 0; font-size: 22px;">ภาระงานประจำเวร</h4>
+                <p style="margin:0;"><strong>คะแนนภาระงาน:</strong> ${r.datasetObj['คะแนนภาระงาน']||0} <br><strong>สถานะ:</strong> ${r.datasetObj['สถานะภาระงาน']||'-'}</p>
+            </div>
+            </div>`;
+            return html;
+        }
+
+        function buildPage2(r) {
+            let html = buildHeader(r, "ส่วนที่ 2: สรุปหัตถการและกิจกรรมพยาบาล");
+            html += `<table width="100%" border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; border-color: #CBD5E1; font-size: 20px;">`;
             let count = 0; html += `<tr>`;
+            // ข้ามฟิลด์ที่ไม่ได้เป็นกิจกรรม/หัตถการ (เพื่อไม่ให้แสดงซ้ำกับหน้า 1)
+            let excluded = ['ยอดยกมา','รับใหม่','รับย้าย','จำหน่าย','ย้ายไป','ไม่สมัครใจอยู่','ตาย','ส่งต่อ',
+                            'คงพยาบาล','คะแนนภาระงาน','สามัญ','ห้องพิเศษ','ห้องแยก',
+                            'ประเภท 1','ประเภท 2','ประเภท 3','ประเภท 4'];
             for(let key in r.datasetObj) {
-                if(typeof r.datasetObj[key] === 'number') {
+                if(typeof r.datasetObj[key] === 'number' && !excluded.includes(key)) {
                     html += `<td><strong>${key}:</strong> ${r.datasetObj[key]}</td>`;
-                    count++; if(count % 4 === 0) html += `</tr><tr>`;
+                    count++; if(count % 3 === 0) html += `</tr><tr>`; 
                 }
             }
-            while(count % 4 !== 0) { html += `<td></td>`; count++; }
+            while(count % 3 !== 0) { html += `<td></td>`; count++; }
             html += `</tr></table>`;
-            html += `<div style="margin-top: 15px;"><p style="margin:0;"><strong>รายชื่อปฏิบัติหน้าที่:</strong> พยาบาล1: ${r.datasetObj['พยาบาล 1']||'-'}, พยาบาล2: ${r.datasetObj['พยาบาล 2']||'-'}, ผู้ช่วยเหลือ: ${r.datasetObj['ผู้ช่วยเหลือคนไข้']||'-'}, ตรวจการ: ${r.datasetObj['พยาบาลตรวจการ']||'-'}</p></div>`;
+            return html;
+        }
+
+        function buildPage3(r) {
+            let html = buildHeader(r, "ส่วนที่ 3: รายงานอุบัติการณ์และการลงนาม");
+            html += `
+            <div style="font-size: 20px; line-height: 1.6; min-height: 400px;">
+                <div style="background: #FEF2F2; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #FCA5A5;">
+                    <h4 class="prompt-text" style="color: #DC2626; margin: 0 0 10px 0; font-size: 22px;">อุบัติการณ์ และความเสี่ยงประจำเวร</h4>
+                    <p style="margin:0;"><strong>สรุปเหตุการณ์:</strong> ${r.datasetObj['อุบัติการณ์'] || 'เหตุการณ์ทั่วไปปกติ'}</p>
+                    <p style="margin:10px 0 0 0;"><strong>รายละเอียด Refer / 24 ชม:</strong><br> ${r.datasetObj['รายละเอียด Refer'] || '-'}</p>
+                    <p style="margin:10px 0 0 0;"><strong>รายละเอียด Case Dead:</strong><br> ${r.datasetObj['รายละเอียด Dead'] || '-'}</p>
+                    <p style="margin:10px 0 0 0;"><strong>รายละเอียด ผู้ป่วยประเภท 4:</strong><br> ${r.datasetObj['รายละเอียด Type 4'] || '-'}</p>
+                </div>
+            </div>
+            `;
+            let saved = Object.keys(globalSettings).length > 0 ? globalSettings : defaultSettings;
+            html += `
+            <div style="display: flex; justify-content: space-between; margin-top: 30px; text-align: center; font-size: 18px;">
+                <div style="width: 30%;">
+                    <br><br>
+                    <p>ลงชื่อ.......................................................</p>
+                    <p style="font-weight:600; margin-top:5px;">( ${r.rn} )</p>
+                    <p>ผู้รายงาน / พยาบาลวิชาชีพ</p>
+                </div>
+                <div style="width: 30%;">
+                    <p>ลงชื่อ.......................................................</p>
+                    <p style="font-weight:600; margin-top:5px;">${saved.sigHwName || defaultSettings.sigHwName}</p>
+                    <p>${saved.sigHwPos1 || defaultSettings.sigHwPos1}</p>
+                    <p>${saved.sigHwPos2 || defaultSettings.sigHwPos2}</p>
+                </div>
+                <div style="width: 30%;">
+                    <p>ลงชื่อ.......................................................</p>
+                    <p style="font-weight:600; margin-top:5px;">${saved.sigHnName || defaultSettings.sigHnName}</p>
+                    <p>${saved.sigHnPos1 || defaultSettings.sigHnPos1}</p>
+                    <p>${saved.sigHnPos2 || defaultSettings.sigHnPos2}</p>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: center; margin-top: 40px; text-align: center; font-size: 18px;">
+                <div style="width: 40%;">
+                    <p>ลงชื่อ.......................................................</p>
+                    <p style="font-weight:600; margin-top:5px;">${saved.sigDirName || defaultSettings.sigDirName}</p>
+                    <p>${saved.sigDirPos1 || defaultSettings.sigDirPos1}</p>
+                    <p>${saved.sigDirPos2 || defaultSettings.sigDirPos2}</p>
+                </div>
+            </div>
+            `;
             return html;
         }
 
@@ -1066,7 +1107,6 @@
             });
             if(filtered.length === 0) return tb.innerHTML = `<tr><td colspan="4" align="center">ไม่มีข้อมูลในช่วงเวลาที่เลือก</td></tr>`;
 
-            // เรียกใช้ฟังก์ชัน sortRecords เพื่อจัดเรียงข้อมูลก่อนนำไปแสดงผล
             filtered = sortRecords(filtered, sortMode);
 
             filtered.forEach(r => {
@@ -1096,7 +1136,6 @@
                 inp.style.display = 'none'; inp.value = ''; inp.removeAttribute('required'); inp.classList.remove('error-input'); 
             });
             
-            // อ่านค่ากลับจาก Data Object
             document.querySelectorAll('.inc-chk').forEach(chk => {
                 let inp = chk.closest('.incident-item').querySelector('.incident-detail-input');
                 let lbl = inp.getAttribute('data-label');
@@ -1134,62 +1173,81 @@
 
         function viewPreview(uid) {
             const r = localDiaryStorage.find(i => String(i.uid).trim() === String(uid).trim());
-            let html = `<div style="text-align:left; font-size:18px; line-height: 1.8;">` + buildTemplateHTML(r) + `</div>`;
+            // ต่อ 3 หน้าเพื่อดูในหน้าพรีวิวให้เห็นทั้งหมด 
+            let html = `<div style="text-align:left; font-size:18px; line-height: 1.8;">` + 
+                       buildPage1(r) + `<hr style="margin:40px 0; border-color:#CBD5E1;">` + 
+                       buildPage2(r) + `<hr style="margin:40px 0; border-color:#CBD5E1;">` + 
+                       buildPage3(r) + `</div>`;
             showModal(`ดูข้อมูลเวร ${r.shift} วันที่ ${formatThaiDate(r.date)}`, html, 'info');
             document.getElementById('modalDesc').innerHTML = html;
         }
         
-        // ฟังก์ชันสำหรับเปิดดูตัวอย่างเวรล่าสุด (อ่านอย่างเดียว) เมื่อคลิกการ์ดสีเขียวหน้า Home
         function viewLatestRecordPreview() {
             if (localDiaryStorage.length === 0) {
                 return showModal('แจ้งเตือน', 'ยังไม่มีข้อมูลการบันทึกเวรในระบบ', 'warning');
             }
-            
-            // ดึงข้อมูลทั้งหมดมาเรียงลำดับใหม่ เพื่อหาเวรที่เพิ่งบันทึกล่าสุด (อ้างอิงจาก UID)
             let sortedByUID = [...localDiaryStorage].sort((a, b) => Number(b.uid) - Number(a.uid));
             let latest = sortedByUID[0]; 
-            
-            if (latest && latest.uid) {
-                // เรียกใช้ฟังก์ชันดูตัวอย่างเดิมที่สร้างไว้แล้ว
-                viewPreview(latest.uid);
-            }
+            if (latest && latest.uid) { viewPreview(latest.uid); }
         }
         
         async function regenerateFile(uid, type) {
             const r = localDiaryStorage.find(i => String(i.uid).trim() === String(uid).trim());
             if(!r) return;
-            showModal('กำลังสร้างไฟล์...', 'รอสักครู่ ระบบกำลังวาดเอกสารใหม่...', 'info');
+            showModal('กำลังสร้างไฟล์...', 'รอสักครู่ ระบบกำลังวาดเอกสารใหม่แยกเป็น 3 หน้า...', 'info');
 
-            document.getElementById('rt-subtitle').innerText = `วันที่ ${formatThaiDate(r.date)} | เวร ${r.shift}`;
-            document.getElementById('rt-content').innerHTML = buildTemplateHTML(r);
-            document.getElementById('rt-rn-name').innerText = `( ${r.rn} )`;
+            document.getElementById('render-p1').innerHTML = buildPage1(r);
+            document.getElementById('render-p2').innerHTML = buildPage2(r);
+            document.getElementById('render-p3').innerHTML = buildPage3(r);
             
             const renderDiv = document.getElementById('render-template');
             renderDiv.style.left = "0px"; 
 
             setTimeout(async () => {
                 try {
-                    const canvas = await html2canvas(renderDiv, { scale: 2 });
-                    renderDiv.style.left = "-9999px"; closeModal();
+                    const c1 = await html2canvas(document.getElementById('render-p1'), { scale: 2 });
+                    const c2 = await html2canvas(document.getElementById('render-p2'), { scale: 2 });
+                    const c3 = await html2canvas(document.getElementById('render-p3'), { scale: 2 });
+                    renderDiv.style.left = "-9999px"; 
+                    closeModal();
                     
                     if(type === 'jpeg') {
+                        // แบบรูปภาพ จะเอา 3 แผ่นมาต่อกันในแนวตั้งยาวๆ เป็นแผ่นเดียว
+                        const mergedCanvas = document.createElement('canvas');
+                        mergedCanvas.width = c1.width;
+                        mergedCanvas.height = c1.height + c2.height + c3.height;
+                        const ctx = mergedCanvas.getContext('2d');
+                        ctx.drawImage(c1, 0, 0);
+                        ctx.drawImage(c2, 0, c1.height);
+                        ctx.drawImage(c3, 0, c1.height + c2.height);
+
                         let link = document.createElement('a'); link.download = `IPD_${r.date}_${r.shift}.jpg`;
-                        link.href = canvas.toDataURL('image/jpeg', 0.95); link.click();
+                        link.href = mergedCanvas.toDataURL('image/jpeg', 0.95); link.click();
                     } else {
-                        const img = canvas.toDataURL('image/jpeg', 0.95);
-                        const { jsPDF } = window.jspdf; const pdf = new jsPDF('p', 'mm', 'a4');
-                        const w = pdf.internal.pageSize.getWidth(); const h = (canvas.height * w) / canvas.width;
-                        pdf.addImage(img, 'JPEG', 0, 0, w, h); pdf.save(`IPD_${r.date}_${r.shift}.pdf`);
+                        // ส่วนของ PDF สร้างเป็น 3 หน้าสมบูรณ์
+                        const { jsPDF } = window.jspdf; 
+                        const pdf = new jsPDF('p', 'mm', 'a4');
+                        const w = pdf.internal.pageSize.getWidth(); 
+
+                        const addCanvasToPdf = (canvas, isFirst) => {
+                            const h = (canvas.height * w) / canvas.width;
+                            if(!isFirst) pdf.addPage();
+                            pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, w, h);
+                        };
+
+                        addCanvasToPdf(c1, true);
+                        addCanvasToPdf(c2, false);
+                        addCanvasToPdf(c3, false);
+
+                        pdf.save(`IPD_${r.date}_${r.shift}.pdf`);
                     }
                 } catch(e) { alert("เกิดข้อผิดพลาด: " + e); renderDiv.style.left = "-9999px"; closeModal(); }
             }, 500);
         }
 
-        // หน้า Home อัปเดตข้อมูลให้ถูกต้องตามที่บันทึกล่าสุด (อ้างอิงจาก UID)
         function updateDashboard() {
             document.getElementById('home-date').innerText = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
 
-            // ดึงข้อมูลทั้งหมดมาเรียงลำดับใหม่ โดยใช้ UID จากมากไปน้อย (ล่าสุด)
             let sortedByUID = [...localDiaryStorage].sort((a, b) => Number(b.uid) - Number(a.uid));
             let latest = sortedByUID[0]; 
             
@@ -1234,7 +1292,6 @@
             }
         }
 
-        // เรียงลำดับ 4 รายการ
         function updateSummaryTable() {
             const start = document.getElementById('sum-start').value;
             const end = document.getElementById('sum-end').value;
@@ -1293,7 +1350,6 @@
             if(tabId === 'risk-review') updateRiskReviewTable();
         }
 
-        // Risk Review Interactive + Sorting
         function updateRiskReviewTable() {
             const start = document.getElementById('risk-sum-start').value;
             const end = document.getElementById('risk-sum-end').value;
@@ -1344,16 +1400,36 @@
 
         async function exportRiskPDF() {
             const target = document.getElementById('risk-export-target');
-            showModal('กำลังสร้างไฟล์ PDF...', 'รอสักครู่ ระบบกำลังจัดทำรายงานทบทวนอุบัติการณ์...', 'info');
+            showModal('กำลังสร้างไฟล์ PDF...', 'รอสักครู่ ระบบกำลังจัดทำรายงานทบทวนอุบัติการณ์เป็น A4 แนวนอน (ตัดหน้าอัตโนมัติ)...', 'info');
             setTimeout(async () => {
                 try {
                     const canvas = await html2canvas(target, { scale: 2 });
-                    const img = canvas.toDataURL('image/jpeg', 1.0);
+                    const imgData = canvas.toDataURL('image/jpeg', 1.0);
                     const { jsPDF } = window.jspdf; 
+                    // เปลี่ยนเป็นแนวนอน Landscape 'l'
                     const pdf = new jsPDF('l', 'mm', 'a4');
-                    const w = pdf.internal.pageSize.getWidth(); 
-                    const h = (canvas.height * w) / canvas.width;
-                    pdf.addImage(img, 'JPEG', 0, 0, w, h); 
+                    
+                    const pdfWidth = pdf.internal.pageSize.getWidth(); 
+                    const pdfHeight = pdf.internal.pageSize.getHeight();
+                    
+                    // คำนวณความสูงจริงของภาพในอัตราส่วน A4 แนวนอน
+                    const canvasImgHeight = (canvas.height * pdfWidth) / canvas.width;
+                    
+                    let heightLeft = canvasImgHeight;
+                    let position = 0;
+
+                    // ปริ้นภาพลงแผ่นแรก
+                    pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, canvasImgHeight);
+                    heightLeft -= pdfHeight;
+
+                    // เช็คลูปขึ้นหน้าใหม่ ถ้ายาวเกิน 1 แผ่น
+                    while (heightLeft > 0) {
+                        position -= pdfHeight; // ขยับพิกัดขึ้น
+                        pdf.addPage();
+                        pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, canvasImgHeight);
+                        heightLeft -= pdfHeight;
+                    }
+
                     pdf.save(`Risk_Review_${document.getElementById('risk-sum-start').value}.pdf`);
                     closeModal();
                 } catch(e) { alert("Error PDF: " + e); closeModal(); }
@@ -1406,7 +1482,8 @@
             let summary = {};
             document.querySelectorAll('.data-field').forEach(f => {
                 let lbl = f.getAttribute('data-label');
-                if(lbl && f.type === 'number') summary[lbl] = 0;
+                // กวาด input number และ คงพยาบาลที่ซ่อนอยู่มารวม
+                if(lbl && (f.type === 'number' || f.id === 'v-remain')) summary[lbl] = 0;
             });
 
             filtered.forEach(item => {
@@ -1434,7 +1511,8 @@
 
             let labels = [];
             document.querySelectorAll('.data-field').forEach(f => {
-                let lbl = f.getAttribute('data-label'); if(lbl && f.type === 'number') labels.push(lbl);
+                let lbl = f.getAttribute('data-label'); 
+                if(lbl && (f.type === 'number' || f.id === 'v-remain')) labels.push(lbl);
             });
 
             if(type === 'csv') {
