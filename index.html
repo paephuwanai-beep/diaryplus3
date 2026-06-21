@@ -220,8 +220,15 @@
                         <div class="form-control"><label>จากวันที่</label><input type="date" id="dash-start"></div>
                         <div class="form-control"><label>ถึงวันที่</label><input type="date" id="dash-end"></div>
                         <div class="form-control"><label>รูปแบบการแสดงผล</label>
-                            <select id="dash-type">
-                                <option value="bar">กราฟแท่ง</option><option value="pie">กราฟวงกลม</option><option value="table">ตารางข้อมูล</option>
+                            <select id="dash-type" onchange="updateDashboard()">
+                                <option value="bar">📊 แผนภูมิแท่ง (Bar Chart)</option>
+                                <option value="pie">🍕 แผนภูมิวงกลม (Pie Chart)</option>
+                                <option value="line">📈 กราฟเส้นแนวโน้ม (Line Trend)</option>
+                                <option value="stacked">🥞 กราฟแท่งซ้อน (Stacked Bar)</option>
+                                <option value="heatmap">🌡️ ตารางสถิติสี (Heatmap)</option>
+                                <option value="gauge">🗂️ การ์ดสรุปยอด (KPI Cards)</option>
+                                <option value="table">📋 ตารางข้อมูล (Data Table)</option>
+                                <option value="avg-ipd">🧮 คำนวณผู้ป่วยคงพยาบาลเฉลี่ย</option>
                             </select>
                         </div>
                         <button class="btn btn-primary" style="width: 100%; font-size: 16px; padding: 12px;" onclick="updateDashboard()"><i class="fa-solid fa-rotate"></i> อัปเดตข้อมูล</button>
