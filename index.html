@@ -1411,7 +1411,7 @@
             document.getElementById('modalActions').style.display = 'block';
         }
         
-        function updateDashboard() {
+       function updateDashboard() {
             document.getElementById('home-date').innerText = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
 
             let sortedByUID = [...localDiaryStorage].sort((a, b) => Number(b.uid) - Number(a.uid));
@@ -1432,29 +1432,153 @@
             
             let filtered = localDiaryStorage.filter(item => {
                 if (start && end) return item.date >= start && item.date <= end;
+                if (start) return item.date >= start;
+                if (end) return item.date <= end;
                 return true;
             });
             
-            let sumData = {};
-            labels.forEach(lbl => sumData[lbl] = 0);
-            filtered.forEach(item => { labels.forEach(lbl => { if(item.datasetObj[lbl] !== undefined) sumData[lbl] += item.datasetObj[lbl]; }); });
-
             const canvas = document.getElementById('mainChart');
             const tbContainer = document.getElementById('table-container');
 
-            if(type === 'table') {
+            if(filtered.length === 0) {
                 canvas.style.display = 'none'; tbContainer.style.display = 'block';
-                let thtml = `<table class="data-table"><thead><tr><th>รายการข้อมูล</th><th>ยอดรวม (ครั้ง/ราย)</th></tr></thead><tbody>`;
-                labels.forEach(lbl => { thtml += `<tr><td>${lbl}</td><td>${sumData[lbl]}</td></tr>`; });
-                tbContainer.innerHTML = thtml + `</tbody></table>`;
-            } else {
-                canvas.style.display = 'block'; tbContainer.style.display = 'none';
-                if(myChart) myChart.destroy();
-                myChart = new Chart(canvas.getContext('2d'), {
-                    type: type,
-                    data: { labels: labels, datasets: [{ label: 'ยอดรวม', data: labels.map(l => sumData[l]), backgroundColor: ['#8B5CF6', '#3B82F6', '#10B981', '#F59E0B', '#EF4444'], borderRadius: type==='bar'?8:0 }] },
-                    options: { responsive: true, maintainAspectRatio: false }
+                tbContainer.innerHTML = '<p style="text-align: center; color: #DC2626; padding: 20px;">ไม่มีข้อมูลในช่วงเวลาที่เลือก</p>';
+                return;
+            }
+            
+            // ประมวลผลข้อมูล (แยกยอดรวม และ แยกรายวัน)
+            let sumData = {};
+            let dateMap = {};
+            let totalNetIpd = 0;
+
+            labels.forEach(lbl => sumData[lbl] = 0);
+            filtered.forEach(item => { 
+                let d = item.date;
+                if(!dateMap[d]) {
+                    dateMap[d] = {};
+                    labels.forEach(l => dateMap[d][l] = 0);
+                }
+                labels.forEach(lbl => { 
+                    let val = item.datasetObj[lbl] || 0;
+                    sumData[lbl] += val; 
+                    dateMap[d][lbl] += val;
                 });
+                totalNetIpd += (item.netCount || 0);
+            });
+
+            let sortedDates = Object.keys(dateMap).sort();
+            let colors = ['#8B5CF6', '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#06B6D4', '#EC4899'];
+
+            // รีเซ็ตการแสดงผล
+            if(myChart) { myChart.destroy(); myChart = null; }
+            canvas.style.display = 'none'; 
+            tbContainer.style.display = 'none';
+
+            // ----------------------------------------
+            // Render ข้อมูลตามประเภทที่เลือก
+            // ----------------------------------------
+            if(type === 'table') {
+                tbContainer.style.display = 'block';
+                let thtml = `<table class="data-table"><thead><tr><th>รายการข้อมูล (จาก ${filtered.length} เวร)</th><th>ยอดสะสมรวม (ครั้ง/ราย)</th></tr></thead><tbody>`;
+                labels.forEach(lbl => { thtml += `<tr><td>${lbl}</td><td><strong style="color:#4C1D95; font-size:18px;">${sumData[lbl]}</strong></td></tr>`; });
+                tbContainer.innerHTML = thtml + `</tbody></table>`;
+            } 
+            else if(type === 'avg-ipd') {
+                tbContainer.style.display = 'block';
+                let avg = (totalNetIpd / filtered.length).toFixed(2);
+                tbContainer.innerHTML = `
+                    <div style="text-align: center; padding: 30px; background: #FFF; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border: 1px solid #E2E8F0;">
+                        <h4 style="color:#475569; margin-bottom: 15px; font-family:'Sarabun'; font-size:18px;">ผู้ป่วยคงพยาบาลเฉลี่ย (ในช่วง ${filtered.length} เวร)</h4>
+                        <div style="font-size: 70px; font-weight: bold; color: #9333EA; font-family:'Prompt'; line-height: 1;">
+                            ${avg} <span style="font-size:20px; color:#64748B; font-weight:normal;">ราย / เวร</span>
+                        </div>
+                    </div>
+                `;
+            }
+            else if(type === 'gauge') {
+                tbContainer.style.display = 'block';
+                let html = `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; width: 100%;">`;
+                labels.forEach((lbl, i) => {
+                    let color = colors[i % colors.length];
+                    html += `
+                        <div style="background: white; border: 1px solid ${color}40; border-bottom: 4px solid ${color}; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.03);">
+                            <div style="color: #64748B; font-size: 15px; margin-bottom: 10px;">${lbl}</div>
+                            <div style="color: ${color}; font-size: 34px; font-weight: bold; font-family: 'Prompt';">${sumData[lbl]}</div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                tbContainer.innerHTML = html;
+            }
+            else if(type === 'heatmap') {
+                tbContainer.style.display = 'block';
+                let html = `<div style="overflow-x:auto;"><table class="data-table" style="text-align:center; min-width: 600px;"><thead><tr><th style="text-align:left; min-width:150px;">รายการ / วันที่</th>`;
+                sortedDates.forEach(d => html += `<th>${d.substring(8,10)}/${d.substring(5,7)}</th>`);
+                html += `</tr></thead><tbody>`;
+                
+                labels.forEach(lbl => {
+                    let maxVal = Math.max(...sortedDates.map(d => dateMap[d][lbl] || 0));
+                    html += `<tr><td style="text-align:left; font-weight:bold; color:#334155;">${lbl}</td>`;
+                    sortedDates.forEach(d => {
+                        let val = dateMap[d][lbl] || 0;
+                        let alpha = maxVal === 0 ? 0 : (val / maxVal) * 0.85; 
+                        let bg = `rgba(147, 51, 234, ${alpha})`;
+                        let textCol = alpha > 0.4 ? 'white' : '#1E293B';
+                        html += `<td style="background-color: ${bg}; color: ${textCol}; font-weight: 600; border-radius: 4px; border: 1px solid #FFF;">${val}</td>`;
+                    });
+                    html += `</tr>`;
+                });
+                html += `</tbody></table></div>`;
+                tbContainer.innerHTML = html;
+            }
+            else {
+                // สำหรับกราฟเส้น (Line), แผนภูมิแท่ง (Bar), กราฟซ้อน (Stacked) และวงกลม (Pie)
+                canvas.style.display = 'block';
+                let chartConfig = {
+                    type: type === 'stacked' ? 'bar' : type,
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+                };
+
+                if(type === 'bar' || type === 'pie') {
+                    // พล็อตกราฟยอดรวมทั้งหมด
+                    chartConfig.data = {
+                        labels: labels,
+                        datasets: [{ 
+                            label: 'ยอดรวมสะสม', 
+                            data: labels.map(l => sumData[l]), 
+                            backgroundColor: colors,
+                            borderWidth: 1, borderColor: '#FFF',
+                            borderRadius: type === 'bar' ? 6 : 0
+                        }]
+                    };
+                } 
+                else if (type === 'line' || type === 'stacked') {
+                    // พล็อตกราฟแยกรายวัน (Trend analysis)
+                    let datasets = labels.map((lbl, i) => {
+                        return {
+                            label: lbl,
+                            data: sortedDates.map(d => dateMap[d][lbl] || 0),
+                            backgroundColor: colors[i % colors.length] + '90',
+                            borderColor: colors[i % colors.length],
+                            borderWidth: 2,
+                            tension: 0.3, // ทำให้เส้นโค้งสมูท
+                            fill: type === 'line' ? false : true,
+                            borderRadius: type === 'stacked' ? 4 : 0
+                        };
+                    });
+                    
+                    // แกน X โชว์แค่วัน/เดือน (ตัดปีออกให้กราฟไม่รก)
+                    chartConfig.data = { labels: sortedDates.map(d => `${d.substring(8,10)}/${d.substring(5,7)}`), datasets: datasets };
+                    
+                    if(type === 'stacked') {
+                        chartConfig.options.scales = {
+                            x: { stacked: true },
+                            y: { stacked: true }
+                        };
+                    }
+                }
+
+                myChart = new Chart(canvas.getContext('2d'), chartConfig);
             }
         }
 
