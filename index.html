@@ -1060,50 +1060,71 @@
             return html;
         }
 
-        function buildPage3(r) {
+       function buildPage3(r) {
             let html = buildHeader(r, "ส่วนที่ 3: รายงานอุบัติการณ์และการลงนาม");
+            
+            // 1. ส่วนรายงานอุบัติการณ์ (Modern UI)
             html += `
-            <div style="font-family: 'Sarabun', sans-serif; font-size: 14pt; line-height: 1.6; color: #000; min-height: 350px;">
-                <div style="margin-bottom: 20px;">
-                    <div style="font-size: 18pt; font-weight: bold; text-decoration: underline; margin-bottom: 5px;">อุบัติการณ์ และความเสี่ยงประจำเวร</div>
-                    <div><b>สรุปเหตุการณ์:</b> ${r.datasetObj['อุบัติการณ์'] || 'เหตุการณ์ทั่วไปปกติ'}</div>
-                    <div style="margin-top:10px;"><b>รายละเอียด Refer / 24 ชม:</b><br> ${r.datasetObj['รายละเอียด Refer'] || '-'}</div>
-                    <div style="margin-top:10px;"><b>รายละเอียด Case Dead:</b><br> ${r.datasetObj['รายละเอียด Dead'] || '-'}</div>
-                    <div style="margin-top:10px;"><b>รายละเอียด ผู้ป่วยประเภท 4:</b><br> ${r.datasetObj['รายละเอียด Type 4'] || '-'}</div>
+            <div style="font-family: 'Sarabun', sans-serif; font-size: 14pt; color: #1E293B;">
+                
+                <div style="background: linear-gradient(to right, #F3E8FF, #FFFFFF); border-left: 6px solid #7C3AED; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                    <div style="font-size: 16pt; font-weight: bold; color: #5B21B6; margin-bottom: 10px;">
+                        สรุปเหตุการณ์
+                    </div>
+                    <div style="font-weight: 500; color: ${r.datasetObj['อุบัติการณ์'] !== 'เหตุการณ์ทั่วไปปกติ' ? '#DC2626' : '#059669'};">
+                        ${r.datasetObj['อุบัติการณ์'] || 'เหตุการณ์ทั่วไปปกติ'}
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 25px;">
+                    <div style="background: #FFFFFF; padding: 15px; border-radius: 8px; border: 1px solid #E2E8F0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                        <div style="font-weight: bold; color: #2563EB; margin-bottom: 5px;">รายละเอียด Refer / 24 ชม:</div>
+                        <div style="color: #475569;">${r.datasetObj['รายละเอียด Refer'] || '-'}</div>
+                    </div>
+                    
+                    <div style="background: #FFFFFF; padding: 15px; border-radius: 8px; border: 1px solid #E2E8F0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                        <div style="font-weight: bold; color: #DC2626; margin-bottom: 5px;">รายละเอียด Case Dead:</div>
+                        <div style="color: #475569;">${r.datasetObj['รายละเอียด Dead'] || '-'}</div>
+                    </div>
+                    
+                    <div style="background: #FFFFFF; padding: 15px; border-radius: 8px; border: 1px solid #E2E8F0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                        <div style="font-weight: bold; color: #D97706; margin-bottom: 5px;">รายละเอียด ผู้ป่วยประเภท 4:</div>
+                        <div style="color: #475569;">${r.datasetObj['รายละเอียด Type 4'] || '-'}</div>
+                    </div>
                 </div>
             </div>
             `;
+            
+            // 2. ส่วนลงนาม (Modern Vertical Stack with Horizontal Cards)
             let saved = Object.keys(globalSettings).length > 0 ? globalSettings : defaultSettings;
+            
+            // ฟังก์ชันช่วยสร้างการ์ดลายเซ็นแบบแนวนอน (ประหยัดพื้นที่ และสวยงาม)
+            const createSigCard = (title, subtitle, name, color) => `
+                <div style="display: flex; justify-content: space-between; align-items: center; background: #FFFFFF; border: 1px solid ${color}40; border-left: 5px solid ${color}; padding: 15px 20px; border-radius: 8px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                    <div style="flex: 1; text-align: left;">
+                        <div style="font-weight: bold; color: ${color}; font-size: 15pt;">${title}</div>
+                        <div style="color: #64748B; font-size: 13pt;">${subtitle}</div>
+                    </div>
+                    <div style="flex: 1; text-align: right;">
+                        <div style="margin-bottom: 10px; color: #94A3B8; font-size: 12pt;">ลงชื่อ..............................................................</div>
+                        <div style="font-weight: bold; font-size: 15pt; color: #1E293B;">${name}</div>
+                    </div>
+                </div>
+            `;
+
             html += `
-            <table width="100%" style="font-family: 'Sarabun', sans-serif; font-size: 14pt; text-align: center; border: none; margin-top: 20px; color: #000;">
-                <tr>
-                    <td style="width: 33%; vertical-align: bottom; padding-bottom: 30px;">
-                        ลงชื่อ.......................................................<br>
-                        ( ${r.rn} )<br>
-                        ผู้รายงาน / พยาบาลวิชาชีพ
-                    </td>
-                    <td style="width: 33%; vertical-align: bottom; padding-bottom: 30px;">
-                        ลงชื่อ.......................................................<br>
-                        ${saved.sigHwName || defaultSettings.sigHwName}<br>
-                        ${saved.sigHwPos1 || defaultSettings.sigHwPos1}<br>
-                        ${saved.sigHwPos2 || defaultSettings.sigHwPos2}
-                    </td>
-                    <td style="width: 33%; vertical-align: bottom; padding-bottom: 30px;">
-                        ลงชื่อ.......................................................<br>
-                        ${saved.sigHnName || defaultSettings.sigHnName}<br>
-                        ${saved.sigHnPos1 || defaultSettings.sigHnPos1}<br>
-                        ${saved.sigHnPos2 || defaultSettings.sigHnPos2}
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3" style="vertical-align: bottom; padding-top: 30px;">
-                        ลงชื่อ.......................................................<br>
-                        ${saved.sigDirName || defaultSettings.sigDirName}<br>
-                        ${saved.sigDirPos1 || defaultSettings.sigDirPos1}<br>
-                        ${saved.sigDirPos2 || defaultSettings.sigDirPos2}
-                    </td>
-                </tr>
-            </table>
+            <div style="font-family: 'Sarabun', sans-serif; background: #F8FAFC; padding: 20px; border-radius: 12px; border: 1px solid #E2E8F0;">
+                <div style="font-size: 16pt; font-weight: bold; color: #334155; text-align: center; margin-bottom: 20px;">
+                    การรับรองและลงนาม (Signatures)
+                </div>
+                
+                <div style="display: flex; flex-direction: column;">
+                    ${createSigCard('ผู้รายงาน / พยาบาลวิชาชีพ', 'ผู้บันทึกเหตุการณ์ประจำเวร', `( ${r.rn} )`, '#3B82F6')}
+                    ${createSigCard(saved.sigHwPos2 || defaultSettings.sigHwPos2, saved.sigHwPos1 || defaultSettings.sigHwPos1, saved.sigHwName || defaultSettings.sigHwName, '#8B5CF6')}
+                    ${createSigCard(saved.sigHnPos2 || defaultSettings.sigHnPos2, saved.sigHnPos1 || defaultSettings.sigHnPos1, saved.sigHnName || defaultSettings.sigHnName, '#EC4899')}
+                    ${createSigCard(saved.sigDirPos2 || defaultSettings.sigDirPos2, saved.sigDirPos1 || defaultSettings.sigDirPos1, saved.sigDirName || defaultSettings.sigDirName, '#10B981')}
+                </div>
+            </div>
             `;
             return html;
         }
