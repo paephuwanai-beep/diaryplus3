@@ -1307,8 +1307,10 @@
             const r = localDiaryStorage.find(i => String(i.uid).trim() === String(uid).trim());
             if(!r) return;
 
+            // แสดงหน้าจอโหลดก่อน เนื่องจากกระบวนการสร้าง PDF ใช้เวลาเล็กน้อย
             showModal(`กำลังสร้างตัวอย่าง...`, `<div style="text-align:center;"><div class="spinner" style="border-top-color:#3B82F6; margin: 0 auto 15px auto;"></div><p style="font-family:'Prompt';">กำลังเตรียมไฟล์ PDF กรุณารอสักครู่...</p></div>`, 'info');
 
+            // วาด HTML ลงใน div ซ่อน
             document.getElementById('render-p1').innerHTML = buildPage1(r);
             document.getElementById('render-p2').innerHTML = buildPage2(r);
             document.getElementById('render-p3').innerHTML = buildPage3(r);
@@ -1319,12 +1321,14 @@
 
             setTimeout(async () => {
                 try {
+                    // แคปเจอร์เป็นรูป
                     const c1 = await html2canvas(document.getElementById('render-p1'), { scale: 1.5 });
                     const c2 = await html2canvas(document.getElementById('render-p2'), { scale: 1.5 });
                     const c3 = await html2canvas(document.getElementById('render-p3'), { scale: 1.5 });
                     const c4 = await html2canvas(document.getElementById('render-p4'), { scale: 1.5 });
                     renderDiv.style.left = "-9999px";
 
+                    // แปลงเป็น PDF
                     const { jsPDF } = window.jspdf;
                     const pdf = new jsPDF('p', 'mm', 'a4');
                     const w = pdf.internal.pageSize.getWidth();
@@ -1337,30 +1341,41 @@
 
                     addC(c1, true); addC(c2, false); addC(c3, false); addC(c4, false);
 
+                    // สร้าง Blob URL สำหรับแสดงใน iframe
                     const pdfBlob = pdf.output('blob');
                     const pdfUrl = URL.createObjectURL(pdfBlob);
 
+                    // ปรับโครงสร้าง CSS ของ Modal ให้เป็นแบบ Full Screen ไร้ขอบ
                     let modalBox = document.querySelector('.modal-box');
-                    modalBox.style.maxWidth = '1000px';
-                    modalBox.style.width = '95%';
-                    modalBox.style.height = '90vh';
+                    modalBox.style.maxWidth = '1200px'; // ขยายให้กว้างขึ้น
+                    modalBox.style.width = '95vw';
+                    modalBox.style.height = '95vh';
+                    modalBox.style.maxHeight = '95vh';
                     modalBox.style.padding = '0'; 
                     modalBox.style.overflow = 'hidden';
+                    modalBox.style.display = 'flex';
+                    modalBox.style.flexDirection = 'column';
 
                     let html = `
-                        <div style="background: #1E293B; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; color: white;">
+                        <div style="background: #1E293B; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; color: white; flex-shrink: 0;">
                             <div style="font-family: 'Prompt'; font-size: 18px;"><i class="fa-solid fa-file-pdf" style="color:#EF4444;"></i> ดูตัวอย่าง PDF - วันที่ ${formatThaiDate(r.date)} (เวร ${r.shift})</div>
                             <button onclick="closePreviewModal()" style="background: #EF4444; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-family: 'Prompt'; font-size: 16px; transition: 0.3s;" onmouseover="this.style.background='#DC2626'" onmouseout="this.style.background='#EF4444'">
                                 <i class="fa-solid fa-xmark"></i> ปิดหน้าต่าง
                             </button>
                         </div>
-                        <iframe src="${pdfUrl}#toolbar=0" style="width: 100%; height: calc(100% - 60px); border: none; background: #525659;"></iframe>
+                        <iframe src="${pdfUrl}#view=FitH&toolbar=0" style="flex: 1; width: 100%; border: none; background: #525659;"></iframe>
                     `;
 
                     document.getElementById('modalTitle').style.display = 'none';
-                    document.getElementById('modalDesc').style.margin = '0';
-                    document.getElementById('modalDesc').innerHTML = html;
                     document.getElementById('modalActions').style.display = 'none';
+                    
+                    let modalDesc = document.getElementById('modalDesc');
+                    modalDesc.style.margin = '0';
+                    modalDesc.style.padding = '0';
+                    modalDesc.style.flex = '1';
+                    modalDesc.style.display = 'flex';
+                    modalDesc.style.flexDirection = 'column';
+                    modalDesc.innerHTML = html;
 
                 } catch(e) {
                     alert("เกิดข้อผิดพลาดในการโหลด PDF: " + e);
@@ -1370,12 +1385,22 @@
             }, 500);
         }
 
+        // ฟังก์ชันพิเศษสำหรับปิดโหมด Preview และรีเซ็ตขนาดกล่อง Modal ให้กลับมาปกติ
         function closePreviewModal() {
             closeModal();
             let modalBox = document.querySelector('.modal-box');
+            modalBox.style.maxWidth = '500px';
+            modalBox.style.width = '95%';
             modalBox.style.height = 'auto';
+            modalBox.style.maxHeight = '90vh';
+            modalBox.style.padding = '30px';
+            modalBox.style.display = 'block';
+
+            let modalDesc = document.getElementById('modalDesc');
+            modalDesc.style.margin = '0 0 25px 0';
+            modalDesc.style.display = 'block';
+            
             document.getElementById('modalTitle').style.display = 'block';
-            document.getElementById('modalDesc').style.margin = '0 0 25px 0';
             document.getElementById('modalActions').style.display = 'block';
         }
         
