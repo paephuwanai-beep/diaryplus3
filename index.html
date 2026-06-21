@@ -604,10 +604,10 @@
         </div>
     </div>
 
-    <div id="render-template" style="position: absolute; left: -9999px; background: white; width: 850px; color: black; font-family: 'Sarabun', sans-serif;">
-        <div id="render-p1" style="padding: 40px; background:white;"></div>
-        <div id="render-p2" style="padding: 40px; background:white;"></div>
-        <div id="render-p3" style="padding: 40px; background:white;"></div>
+    <div id="render-template" style="position: absolute; left: -9999px; background: white; width: 794px; color: black; font-family: 'Sarabun', sans-serif;">
+        <div id="render-p1" style="padding: 15mm; box-sizing: border-box; background:white; min-height: 1122px;"></div>
+        <div id="render-p2" style="padding: 15mm; box-sizing: border-box; background:white; min-height: 1122px;"></div>
+        <div id="render-p3" style="padding: 15mm; box-sizing: border-box; background:white; min-height: 1122px;"></div>
     </div>
 
     <script>
@@ -786,7 +786,15 @@
             }
             document.getElementById('customModal').style.display = 'flex';
         }
-        function closeModal() { document.getElementById('customModal').style.display = 'none'; }
+        function closeModal() { 
+            document.getElementById('customModal').style.display = 'none'; 
+            
+            // รีเซ็ตขนาดกล่อง Modal กลับเป็นปกติสำหรับหน้าต่างแจ้งเตือนอื่นๆ
+            let modalBox = document.querySelector('.modal-box');
+            modalBox.style.maxWidth = '500px';
+            modalBox.style.width = '95%';
+            modalBox.style.padding = '30px';
+        }
 
         function setupUI() {
             applyGlobalSettings();
@@ -987,39 +995,48 @@
         // PDF Builders - สร้างหน้ากระดาษแบบแยกส่วน
         function buildHeader(r, pageTitle) {
             return `
-            <div style="text-align: center; border-bottom: 3px solid #4C1D95; padding-bottom: 15px; margin-bottom: 20px;">
-                <h2 class="prompt-text" style="color: #4C1D95; margin:0; font-size: 30px;">ระบบบันทึกเหตุการณ์ประจำเวร</h2>
-                <h3 class="prompt-text" style="color: #1E293B; margin:5px 0 0 0; font-size: 24px;">ผู้ป่วยในชาย โรงพยาบาลคอนสาร</h3>
-                <p style="font-size: 20px; font-weight: 600; margin: 10px 0 0 0;">วันที่ ${formatThaiDate(r.date)} | เวร ${r.shift}</p>
-                <p style="font-size: 16px; margin: 5px 0 0 0; color: #64748B;">${pageTitle}</p>
+            <div style="text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 15px; font-family: 'Sarabun', sans-serif;">
+                <div style="font-size: 18pt; font-weight: bold; margin:0;">ระบบบันทึกเหตุการณ์ประจำเวร ผู้ป่วยในชาย โรงพยาบาลคอนสาร</div>
+                <div style="font-size: 14pt; margin: 5px 0 0 0;">วันที่ ${formatThaiDate(r.date)} | เวร ${r.shift}</div>
+                <div style="font-size: 14pt; margin: 5px 0 0 0;">${pageTitle}</div>
             </div>`;
         }
 
         function buildPage1(r) {
             let html = buildHeader(r, "ส่วนที่ 1: สถิติผู้ป่วยและภาระงาน");
-            html += `<div style="font-size: 20px; line-height: 1.6;">`;
-            html += `<div style="margin-bottom: 15px;"><p style="margin:0;"><strong>รายชื่อผู้ปฏิบัติหน้าที่:</strong></p>
-                     <p style="margin:5px 0 0 20px;">พยาบาล 1: ${r.datasetObj['พยาบาล 1']||'-'} | พยาบาล 2: ${r.datasetObj['พยาบาล 2']||'-'}</p>
-                     <p style="margin:5px 0 0 20px;">ผู้ช่วยเหลือ: ${r.datasetObj['ผู้ช่วยเหลือคนไข้']||'-'} | ตรวจการ: ${r.datasetObj['พยาบาลตรวจการ']||'-'}</p>
+            
+            // ดึงรายชื่อพยาบาลและผู้ช่วยเหลือทั้งหมดที่มีข้อมูล
+            let rns = ['พยาบาล 1', 'พยาบาล 2', 'พยาบาล 3', 'พยาบาล 4'].map(k => r.datasetObj[k]).filter(v => v && v !== '-').join(', ');
+            let nas = ['ผู้ช่วยเหลือคนไข้', 'ผู้ช่วยเหลือคนไข้ 2'].map(k => r.datasetObj[k]).filter(v => v && v !== '-').join(', ');
+            let superv = r.datasetObj['พยาบาลตรวจการ'] && r.datasetObj['พยาบาลตรวจการ'] !== '-' ? r.datasetObj['พยาบาลตรวจการ'] : '-';
+            let doc = r.datasetObj['แพทย์เวร'] && r.datasetObj['แพทย์เวร'] !== '-' ? r.datasetObj['แพทย์เวร'] : '-';
+
+            html += `<div style="font-family: 'Sarabun', sans-serif; font-size: 14pt; line-height: 1.6; color: #000;">`;
+            html += `<div style="margin-bottom: 15px;">
+                        <div style="font-size: 18pt; font-weight: bold; text-decoration: underline;">รายชื่อผู้ปฏิบัติหน้าที่:</div>
+                        <div style="margin:5px 0 0 10px;"><b>พยาบาล:</b> ${rns || '-'}</div>
+                        <div style="margin:5px 0 0 10px;"><b>ผู้ช่วยเหลือ:</b> ${nas || '-'}</div>
+                        <div style="margin:5px 0 0 10px;"><b>พยาบาลตรวจการ:</b> ${superv} | <b>แพทย์เวร:</b> ${doc}</div>
                      </div>`;
+                     
             html += `
-            <div style="background: #F8FAFC; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #CBD5E1;">
-                <h4 class="prompt-text" style="color: #4C1D95; margin: 0 0 10px 0; font-size: 22px;">สถิติผู้ป่วย</h4>
-                <p style="margin:0;"><strong>ยอดยกมา:</strong> ${r.datasetObj['ยอดยกมา']||0} | <strong>รับใหม่:</strong> ${r.datasetObj['รับใหม่']||0} | <strong>รับย้าย:</strong> ${r.datasetObj['รับย้าย']||0} | <strong>จำหน่าย:</strong> ${r.datasetObj['จำหน่าย']||0} | <strong>ย้ายไป:</strong> ${r.datasetObj['ย้ายไป']||0}</p>
-                <p style="margin:5px 0 0 0;"><strong>ตาย:</strong> ${r.datasetObj['ตาย']||0} | <strong>ส่งต่อ:</strong> ${r.datasetObj['ส่งต่อ']||0} | <strong>ไม่สมัครใจ:</strong> ${r.datasetObj['ไม่สมัครใจอยู่']||0}</p>
-                <p style="margin:5px 0 0 0;"><strong style="color:#DC2626;">ยอดคงพยาบาลสุทธิ: ${r.netCount} ราย</strong></p>
+            <div style="margin-bottom: 15px;">
+                <div style="font-size: 18pt; font-weight: bold; text-decoration: underline;">สถิติผู้ป่วย</div>
+                <div><b>ยอดยกมา:</b> ${r.datasetObj['ยอดยกมา']||0} | <b>รับใหม่:</b> ${r.datasetObj['รับใหม่']||0} | <b>รับย้าย:</b> ${r.datasetObj['รับย้าย']||0} | <b>จำหน่าย:</b> ${r.datasetObj['จำหน่าย']||0} | <b>ย้ายไป:</b> ${r.datasetObj['ย้ายไป']||0}</div>
+                <div><b>ตาย:</b> ${r.datasetObj['ตาย']||0} | <b>ส่งต่อ:</b> ${r.datasetObj['ส่งต่อ']||0} | <b>ไม่สมัครใจ:</b> ${r.datasetObj['ไม่สมัครใจอยู่']||0}</div>
+                <div style="margin-top: 5px;"><b>ยอดคงพยาบาลสุทธิ: ${r.netCount} ราย</b></div>
             </div>
-            <div style="background: #F8FAFC; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #CBD5E1;">
-                <h4 class="prompt-text" style="color: #4C1D95; margin: 0 0 10px 0; font-size: 22px;">ประเภทผู้ป่วย</h4>
-                <p style="margin:0;"><strong>ประเภท 1:</strong> ${r.datasetObj['ประเภท 1']||0} | <strong>ประเภท 2:</strong> ${r.datasetObj['ประเภท 2']||0} | <strong>ประเภท 3:</strong> ${r.datasetObj['ประเภท 3']||0} | <strong>ประเภท 4:</strong> ${r.datasetObj['ประเภท 4']||0}</p>
+            <div style="margin-bottom: 15px;">
+                <div style="font-size: 18pt; font-weight: bold; text-decoration: underline;">ประเภทผู้ป่วย</div>
+                <div><b>ประเภท 1:</b> ${r.datasetObj['ประเภท 1']||0} | <b>ประเภท 2:</b> ${r.datasetObj['ประเภท 2']||0} | <b>ประเภท 3:</b> ${r.datasetObj['ประเภท 3']||0} | <b>ประเภท 4:</b> ${r.datasetObj['ประเภท 4']||0}</div>
             </div>
-            <div style="background: #F8FAFC; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #CBD5E1;">
-                <h4 class="prompt-text" style="color: #4C1D95; margin: 0 0 10px 0; font-size: 22px;">ประเภทเตียง</h4>
-                <p style="margin:0;"><strong>สามัญ:</strong> ${r.datasetObj['สามัญ']||0} | <strong>ห้องพิเศษ:</strong> ${r.datasetObj['ห้องพิเศษ']||0} | <strong>ห้องแยก:</strong> ${r.datasetObj['ห้องแยก']||0}</p>
+            <div style="margin-bottom: 15px;">
+                <div style="font-size: 18pt; font-weight: bold; text-decoration: underline;">ประเภทเตียง</div>
+                <div><b>สามัญ:</b> ${r.datasetObj['สามัญ']||0} | <b>ห้องพิเศษ:</b> ${r.datasetObj['ห้องพิเศษ']||0} | <b>ห้องแยก:</b> ${r.datasetObj['ห้องแยก']||0}</div>
             </div>
-            <div style="background: #FFF7ED; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #FED7AA;">
-                <h4 class="prompt-text" style="color: #C2410C; margin: 0 0 10px 0; font-size: 22px;">ภาระงานประจำเวร</h4>
-                <p style="margin:0;"><strong>คะแนนภาระงาน:</strong> ${r.datasetObj['คะแนนภาระงาน']||0} <br><strong>สถานะ:</strong> ${r.datasetObj['สถานะภาระงาน']||'-'}</p>
+            <div style="margin-bottom: 15px;">
+                <div style="font-size: 18pt; font-weight: bold; text-decoration: underline;">ภาระงานประจำเวร</div>
+                <div><b>คะแนนภาระงาน:</b> ${r.datasetObj['คะแนนภาระงาน']||0} | <b>สถานะ:</b> ${r.datasetObj['สถานะภาระงาน']||'-'}</div>
             </div>
             </div>`;
             return html;
@@ -1027,9 +1044,8 @@
 
         function buildPage2(r) {
             let html = buildHeader(r, "ส่วนที่ 2: สรุปหัตถการและกิจกรรมพยาบาล");
-            html += `<table width="100%" border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; border-color: #CBD5E1; font-size: 20px;">`;
+            html += `<table width="100%" border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; border-color: #000; font-family: 'Sarabun', sans-serif; font-size: 14pt; color: #000;">`;
             let count = 0; html += `<tr>`;
-            // ข้ามฟิลด์ที่ไม่ได้เป็นกิจกรรม/หัตถการ (เพื่อไม่ให้แสดงซ้ำกับหน้า 1)
             let excluded = ['ยอดยกมา','รับใหม่','รับย้าย','จำหน่าย','ย้ายไป','ไม่สมัครใจอยู่','ตาย','ส่งต่อ',
                             'คงพยาบาล','คะแนนภาระงาน','สามัญ','ห้องพิเศษ','ห้องแยก',
                             'ประเภท 1','ประเภท 2','ประเภท 3','ประเภท 4'];
@@ -1047,46 +1063,47 @@
         function buildPage3(r) {
             let html = buildHeader(r, "ส่วนที่ 3: รายงานอุบัติการณ์และการลงนาม");
             html += `
-            <div style="font-size: 20px; line-height: 1.6; min-height: 400px;">
-                <div style="background: #FEF2F2; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #FCA5A5;">
-                    <h4 class="prompt-text" style="color: #DC2626; margin: 0 0 10px 0; font-size: 22px;">อุบัติการณ์ และความเสี่ยงประจำเวร</h4>
-                    <p style="margin:0;"><strong>สรุปเหตุการณ์:</strong> ${r.datasetObj['อุบัติการณ์'] || 'เหตุการณ์ทั่วไปปกติ'}</p>
-                    <p style="margin:10px 0 0 0;"><strong>รายละเอียด Refer / 24 ชม:</strong><br> ${r.datasetObj['รายละเอียด Refer'] || '-'}</p>
-                    <p style="margin:10px 0 0 0;"><strong>รายละเอียด Case Dead:</strong><br> ${r.datasetObj['รายละเอียด Dead'] || '-'}</p>
-                    <p style="margin:10px 0 0 0;"><strong>รายละเอียด ผู้ป่วยประเภท 4:</strong><br> ${r.datasetObj['รายละเอียด Type 4'] || '-'}</p>
+            <div style="font-family: 'Sarabun', sans-serif; font-size: 14pt; line-height: 1.6; color: #000; min-height: 350px;">
+                <div style="margin-bottom: 20px;">
+                    <div style="font-size: 18pt; font-weight: bold; text-decoration: underline; margin-bottom: 5px;">อุบัติการณ์ และความเสี่ยงประจำเวร</div>
+                    <div><b>สรุปเหตุการณ์:</b> ${r.datasetObj['อุบัติการณ์'] || 'เหตุการณ์ทั่วไปปกติ'}</div>
+                    <div style="margin-top:10px;"><b>รายละเอียด Refer / 24 ชม:</b><br> ${r.datasetObj['รายละเอียด Refer'] || '-'}</div>
+                    <div style="margin-top:10px;"><b>รายละเอียด Case Dead:</b><br> ${r.datasetObj['รายละเอียด Dead'] || '-'}</div>
+                    <div style="margin-top:10px;"><b>รายละเอียด ผู้ป่วยประเภท 4:</b><br> ${r.datasetObj['รายละเอียด Type 4'] || '-'}</div>
                 </div>
             </div>
             `;
             let saved = Object.keys(globalSettings).length > 0 ? globalSettings : defaultSettings;
             html += `
-            <div style="display: flex; justify-content: space-between; margin-top: 30px; text-align: center; font-size: 18px;">
-                <div style="width: 30%;">
-                    <br><br>
-                    <p>ลงชื่อ.......................................................</p>
-                    <p style="font-weight:600; margin-top:5px;">( ${r.rn} )</p>
-                    <p>ผู้รายงาน / พยาบาลวิชาชีพ</p>
-                </div>
-                <div style="width: 30%;">
-                    <p>ลงชื่อ.......................................................</p>
-                    <p style="font-weight:600; margin-top:5px;">${saved.sigHwName || defaultSettings.sigHwName}</p>
-                    <p>${saved.sigHwPos1 || defaultSettings.sigHwPos1}</p>
-                    <p>${saved.sigHwPos2 || defaultSettings.sigHwPos2}</p>
-                </div>
-                <div style="width: 30%;">
-                    <p>ลงชื่อ.......................................................</p>
-                    <p style="font-weight:600; margin-top:5px;">${saved.sigHnName || defaultSettings.sigHnName}</p>
-                    <p>${saved.sigHnPos1 || defaultSettings.sigHnPos1}</p>
-                    <p>${saved.sigHnPos2 || defaultSettings.sigHnPos2}</p>
-                </div>
-            </div>
-            <div style="display: flex; justify-content: center; margin-top: 40px; text-align: center; font-size: 18px;">
-                <div style="width: 40%;">
-                    <p>ลงชื่อ.......................................................</p>
-                    <p style="font-weight:600; margin-top:5px;">${saved.sigDirName || defaultSettings.sigDirName}</p>
-                    <p>${saved.sigDirPos1 || defaultSettings.sigDirPos1}</p>
-                    <p>${saved.sigDirPos2 || defaultSettings.sigDirPos2}</p>
-                </div>
-            </div>
+            <table width="100%" style="font-family: 'Sarabun', sans-serif; font-size: 14pt; text-align: center; border: none; margin-top: 20px; color: #000;">
+                <tr>
+                    <td style="width: 33%; vertical-align: bottom; padding-bottom: 30px;">
+                        ลงชื่อ.......................................................<br>
+                        ( ${r.rn} )<br>
+                        ผู้รายงาน / พยาบาลวิชาชีพ
+                    </td>
+                    <td style="width: 33%; vertical-align: bottom; padding-bottom: 30px;">
+                        ลงชื่อ.......................................................<br>
+                        ${saved.sigHwName || defaultSettings.sigHwName}<br>
+                        ${saved.sigHwPos1 || defaultSettings.sigHwPos1}<br>
+                        ${saved.sigHwPos2 || defaultSettings.sigHwPos2}
+                    </td>
+                    <td style="width: 33%; vertical-align: bottom; padding-bottom: 30px;">
+                        ลงชื่อ.......................................................<br>
+                        ${saved.sigHnName || defaultSettings.sigHnName}<br>
+                        ${saved.sigHnPos1 || defaultSettings.sigHnPos1}<br>
+                        ${saved.sigHnPos2 || defaultSettings.sigHnPos2}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="vertical-align: bottom; padding-top: 30px;">
+                        ลงชื่อ.......................................................<br>
+                        ${saved.sigDirName || defaultSettings.sigDirName}<br>
+                        ${saved.sigDirPos1 || defaultSettings.sigDirPos1}<br>
+                        ${saved.sigDirPos2 || defaultSettings.sigDirPos2}
+                    </td>
+                </tr>
+            </table>
             `;
             return html;
         }
@@ -1173,12 +1190,25 @@
 
         function viewPreview(uid) {
             const r = localDiaryStorage.find(i => String(i.uid).trim() === String(uid).trim());
-            // ต่อ 3 หน้าเพื่อดูในหน้าพรีวิวให้เห็นทั้งหมด 
-            let html = `<div style="text-align:left; font-size:18px; line-height: 1.8;">` + 
-                       buildPage1(r) + `<hr style="margin:40px 0; border-color:#CBD5E1;">` + 
-                       buildPage2(r) + `<hr style="margin:40px 0; border-color:#CBD5E1;">` + 
-                       buildPage3(r) + `</div>`;
-            showModal(`ดูข้อมูลเวร ${r.shift} วันที่ ${formatThaiDate(r.date)}`, html, 'info');
+            
+            // สไตล์การแสดงผลกระดาษ A4 ในโหมดพรีวิว
+            let a4Style = "background: white; width: 100%; max-width: 210mm; aspect-ratio: 1 / 1.414; margin: 0 auto 20px auto; padding: 15mm; box-shadow: 0 4px 10px rgba(0,0,0,0.2); text-align: left; overflow: hidden; color: #000; box-sizing: border-box;";
+            
+            let html = `
+                <div style="background: #E2E8F0; padding: 20px; max-height: 75vh; overflow-y: auto; border-radius: 8px;">
+                    <div style="${a4Style}">${buildPage1(r)}</div>
+                    <div style="${a4Style}">${buildPage2(r)}</div>
+                    <div style="${a4Style}">${buildPage3(r)}</div>
+                </div>
+            `;
+            
+            // ขยายขนาดกล่อง Modal ออกเพื่อดูพรีวิวเอกสารได้กว้างขึ้น
+            let modalBox = document.querySelector('.modal-box');
+            modalBox.style.maxWidth = '900px';
+            modalBox.style.width = '95%';
+            modalBox.style.padding = '15px';
+            
+            showModal(`ดูตัวอย่างเอกสาร PDF - เวร ${r.shift} วันที่ ${formatThaiDate(r.date)}`, html, 'info');
             document.getElementById('modalDesc').innerHTML = html;
         }
         
